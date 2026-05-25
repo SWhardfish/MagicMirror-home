@@ -1,0 +1,352 @@
+/* global Module, Log, moment */
+
+Module.register("MMM-SL", {
+  defaults: {
+    debug: false,
+    header: "SL Departures",
+    apiBase: "https://transport.integration.sl.se/v1/sites",
+    timewindow: 10,
+    updateInterval: 2,        // minutes between API polls
+    countdownInterval: 1,     // minutes between UI countdown refresh
+    scheduledDisplayLimits: {
+      "Emilie": 2,
+      "Sjöstadsbåtarna": 2
+    },
+    siteids: [],              // [{ id, type, direction, timewindow?, displayCount?, linefilter?, lineStyles? }]
+    convertTimeToMinutes: true,
+    showRecentlyPassed: false,
+    showLastUpdatedAlways: true,
+    lastUpdatedInTitle: true,
+    iconTable: {
+      "BUS": "fa-bus",
+      "SHIP": "fa-ship",
+      "METRO": "fa-subway",
+      "TRAM": "fa-train",
+      "TRAIN": "fa-train",
+    },
+  },
+
+  start: function () {
+    Log.info(this.name + " starting...");
+    this.loaded = false;
+    this.lastUpdated = null;
+    this.departureData = {}; // { stopPointName: { departures: [...], displayCount } }
+    this.scheduleData = {};  // { schedules: [...] }
+    this.loadScheduleData();
+    this.scheduleUpdates();
+    this.updateDepartures();
+  },
+
+  getStyles: function () {
+    return ["font-awesome.css", this.file("css/mmm-sl.css")];
+  },
+
+  getHeader: function () {
+    let dotColor = "red"; // Default
+    let expiredNames = [];
+    const now = moment();
+    if (this.lastUpdated) {
+      let lastUpdateMoment = moment(this.lastUpdated);
+      let diffMinutes = now.diff(lastUpdateMoment, "minutes");
+      if (diffMinutes <= 5) {
+        dotColor = "green"; // fresh API data
+      }
+    }
+    if (this.scheduleData.schedules) {
+      this.scheduleData.schedules.forEach(schedule => {
+        if (schedule.valid_until) {
+          let validUntil = moment(schedule.valid_until, "YYYY-MM-DD");
+          if (now.isAfter(validUntil)) {
+            expiredNames.push(schedule.lineid);
+          }
+        }
+      });
+      if (expiredNames.length > 0) {
+        dotColor = "orange"; // expired schedule(s)
+      }
+    }
+    let expiredText = expiredNames.length > 0 ? ` (${expiredNames.join(", ")} schedule expired)` : "";
+    return `${this.data.header} ${expiredText}`;
+  },
+
+  getDom: function () {
+    let wrapper = document.createElement("div");
+    if (!this.loaded) {
+      wrapper.innerHTML = "Loading...";
+      wrapper.className = "dimmed light small";
+      return wrapper;
+    }
+
+    let table = document.createElement("table");
+    table.className = "small";
+
+    // Combine real-time and scheduled stops (including those with only scheduled data)
+    let allStopNames = new Set(Object.keys(this.departureData));
+    if (this.scheduleData.schedules) {
+      this.scheduleData.schedules.forEach(schedule => allStopNames.add(schedule.stop_name));
+    }
+    let sortedStopPoints = Array.from(allStopNames).sort();
+
+    sortedStopPoints.forEach(stopPointName => {
+      let stopData = this.departureData[stopPointName] || { departures: [], displayCount: 5 };
+
+      // Scheduled departures for UI only
+      let scheduledDepartures = [];
+      if (this.scheduleData.schedules) {
+        const schedulesForStop = this.scheduleData.schedules.filter(schedule => schedule.stop_name === stopPointName);
+        schedulesForStop.forEach(schedule => {
+          scheduledDepartures = [...scheduledDepartures, ...this.getScheduledDepartures(schedule)];
+        });
+      }
+
+      // Merge for UI
+      let combinedDepartures = [...stopData.departures, ...scheduledDepartures];
+
+      // Sort by ETA: treat "Nu" as 0 minutes
+      combinedDepartures.sort((a, b) => {
+        const aMin = isNaN(parseInt(String(a.countdown))) ? 0 : parseInt(a.countdown);
+        const bMin = isNaN(parseInt(String(b.countdown))) ? 0 : parseInt(b.countdown);
+        return aMin - bMin;
+      });
+
+      // Header per stop
+      let headerRow = document.createElement("tr");
+      let headerCell = document.createElement("td");
+      headerCell.colSpan = 4;
+      headerCell.innerHTML = `${stopPointName}`;
+      headerCell.className = "bright align-left";
+      headerRow.appendChild(headerCell);
+      table.appendChild(headerRow);
+
+      // Rows
+      combinedDepartures
+        .slice(0, stopData.displayCount)
+        .forEach(departure => {
+          let row = document.createElement("tr");
+
+          let iconCell = document.createElement("td");
+          let icon = document.createElement("span");
+          icon.className = `fa ${departure.icon}`;
+          icon.style.color = departure.color;
+          iconCell.appendChild(icon);
+          row.appendChild(iconCell);
+
+          let lineCell = document.createElement("td");
+          lineCell.innerHTML = departure.line;
+          lineCell.className = "align-left bright";
+          row.appendChild(lineCell);
+
+          let destinationCell = document.createElement("td");
+          destinationCell.innerHTML = departure.destination;
+          destinationCell.className = "align-right";
+          row.appendChild(destinationCell);
+
+          let timeCell = document.createElement("td");
+          timeCell.innerHTML = departure.countdown;
+          timeCell.className = "align-right";
+          row.appendChild(timeCell);
+
+          table.appendChild(row);
+        });
+    });
+
+    return table;
+  },
+
+  loadScheduleData: function () {
+    fetch(this.file("assets/schedule.json"))
+      .then(response => response.json())
+      .then(data => {
+        Log.info("MMM-SL: Schedule data loaded", data);
+        this.scheduleData = data;
+        this.updateDom();
+      })
+      .catch(error => {
+        Log.error("MMM-SL: Error loading schedule data", error);
+      });
+  },
+
+  getDayName: function (day) {
+    const daysMap = {
+      "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5,
+      "Saturday": 6, "Sunday": 0,
+      "Monday-Friday": [1, 2, 3, 4, 5],
+      "Saturday-Sunday": [6, 0]
+    };
+    return daysMap[day];
+  },
+
+  getScheduledDepartures: function (schedule) {
+    let scheduledDepartures = [];
+    const now = moment();
+
+    // Skip expired schedules completely
+    if (schedule.valid_until) {
+      let validUntil = moment(schedule.valid_until, "YYYY-MM-DD");
+      if (now.isAfter(validUntil)) {
+        return [];
+      }
+    }
+    const todayDay = now.day();
+    const maxDepartures = this.config.scheduledDisplayLimits[schedule.lineid] ?? Infinity;
+
+    Object.keys(schedule.days).forEach(dayRange => {
+      const days = this.getDayName(dayRange);
+      const dayMatch = Array.isArray(days) ? days.includes(todayDay) : todayDay === days;
+      if (!dayMatch) return;
+
+      schedule.days[dayRange].forEach(timeSlot => {
+        timeSlot.minutes.forEach(minute => {
+          let departureTime = moment().hour(timeSlot.hour).minute(minute);
+          if (departureTime.isAfter(now)) {
+            let countdown = departureTime.diff(now, "minutes");
+            let displayTime = countdown > 59 ? departureTime.format("HH:mm")
+              : (countdown > 0 ? `${countdown} min` : "Nu");
+            scheduledDepartures.push({
+              line: `${schedule.lineid}`,
+              destination: schedule.destination,
+              countdown: displayTime,
+              transport_mode: schedule.transport_type,
+              icon: this.getLineIcon(schedule.lineid, schedule.transport_type),
+              color: this.getLineColor(schedule.lineid, schedule.transport_type)
+            });
+          }
+        });
+      });
+    });
+
+    return scheduledDepartures.slice(0, maxDepartures);
+  },
+
+  getLineIcon: function (lineid, transportType) {
+    for (let site of this.config.siteids) {
+      if (site.lineStyles && site.lineStyles[lineid]) {
+        return site.lineStyles[lineid].icon;
+      }
+    }
+    return this.config.iconTable[transportType] || "fa-question-circle";
+  },
+
+  getLineColor: function (lineid, transportType) {
+    for (let site of this.config.siteids) {
+      if (site.lineStyles && site.lineStyles[lineid]) {
+        return site.lineStyles[lineid].color;
+      }
+    }
+    return "White";
+  },
+
+  scheduleUpdates: function () {
+    setInterval(() => this.updateDepartures(), this.config.updateInterval * 60 * 1000);
+    setInterval(() => this.updateCountdowns(), this.config.countdownInterval * 60 * 1000);
+  },
+
+  updateDepartures: function () {
+    this.loaded = false;
+    this.departureData = {};
+    this.config.siteids.forEach(site => {
+      const url = `${this.config.apiBase}/${site.id}/departures?transport=${site.type}&direction=${site.direction}&forecast=${site.timewindow ?? this.config.timewindow}`;
+      this.fetchData(url, site);
+    });
+  },
+
+  fetchData: function (url, siteConfig) {
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        this.processDepartures(data, siteConfig);
+        this.lastUpdated = moment().format();
+        this.loaded = true;
+        this.updateDom();
+      })
+      .catch(error => {
+        Log.error("MMM-SL: Error fetching data from API", error);
+      });
+  },
+
+  processDepartures: function (data, siteConfig) {
+    // Real-time departures from API
+    data.departures.forEach(departure => {
+      let stopPointName = departure.stop_point.name;
+      if (!this.departureData[stopPointName]) {
+        this.departureData[stopPointName] = {
+          departures: [],
+          displayCount: siteConfig.displayCount ?? 5
+        };
+      }
+
+      // optional per-site line filter
+      const passFilter = (!siteConfig.linefilter)
+        || (Array.isArray(siteConfig.linefilter) && siteConfig.linefilter.includes(departure.line.designation));
+      if (!passFilter) return;
+
+      const expectedTime = moment(departure.expected);
+      const countdown = Math.max(0, expectedTime.diff(moment(), "minutes"));
+      const lineStyle = (siteConfig.lineStyles && siteConfig.lineStyles[departure.line.designation]) ? siteConfig.lineStyles[departure.line.designation] : {};
+
+      this.departureData[stopPointName].departures.push({
+        line: departure.line.designation,
+        destination: departure.destination,
+        countdown: countdown > 0 ? `${countdown} min` : "Nu",
+        transport_mode: departure.line.transport_mode,
+        icon: lineStyle.icon || this.config.iconTable[departure.line.transport_mode],
+        color: lineStyle.color || "White",
+
+        // --- Fields needed by MMM-BusAlert (per-departure)
+        expectedISO: expectedTime.toISOString(),
+        siteId: String(siteConfig.id),
+        directionCode: String(siteConfig.direction),
+
+        // NEW: raw SL fields so BusAlert can detect "Nu" reliably
+        rawDisplay: departure.display,    // e.g. "Nu", "1 min", "08:03"
+        rawState: departure.state         // e.g. EXPECTED, ATSTOP
+      });
+    });
+
+    // Flatten for notification (real-time only)
+    const payload = this.buildRealtimeNotificationPayload();
+    this.sendNotification("SL_REALTIME_DATA", payload);
+  },
+
+  // Build the BusAlert payload from current in-memory real-time departures
+  buildRealtimeNotificationPayload() {
+    let allDepartures = [];
+    Object.values(this.departureData).forEach(stopData => {
+      (stopData.departures || []).forEach(dep => {
+        allDepartures.push({
+          line: dep.line,
+          destination: dep.destination,
+          countdown: dep.countdown,
+          transport_mode: dep.transport_mode,
+          icon: dep.icon,
+          color: dep.color,
+          // normalized fields for BusAlert
+          ExpectedDateTime: dep.expectedISO,
+          SiteId: dep.siteId,
+          LineNumber: dep.line,
+          DirectionCode: dep.directionCode,
+          // NEW: pass through SL semantics
+          Display: dep.rawDisplay || dep.countdown,
+          State: dep.rawState || null
+        });
+      });
+    });
+    return { Departures: allDepartures };
+  },
+
+  updateCountdowns: function () {
+    for (let stopPoint in this.departureData) {
+      this.departureData[stopPoint].departures.forEach(departure => {
+        let currentCountdown = parseInt(String(departure.countdown).replace(" min", ""));
+        if (!isNaN(currentCountdown)) {
+          departure.countdown = currentCountdown > 1 ? `${currentCountdown - 1} min` : "Nu";
+        }
+      });
+    }
+    this.updateDom();
+
+    // Re-emit data every minute so MMM-BusAlert can evaluate triggers promptly
+    const payload = this.buildRealtimeNotificationPayload();
+    this.sendNotification("SL_REALTIME_DATA", payload);
+  }
+});

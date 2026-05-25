@@ -1,0 +1,98 @@
+import json
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.ticker import StrMethodFormatter
+from datetime import datetime, timedelta
+import os
+
+# Paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_FILE = os.path.join(BASE_DIR, '..', 'weather_data.json')
+OUTPUT_FILE = os.path.join(BASE_DIR, 'temperature_plot.png')
+
+
+def plot_temperature():
+    if not os.path.exists(DATA_FILE):
+        print("Data file does not exist!")
+        return
+
+    # Load and filter data (only keep last 72h directly)
+    cutoff_time = datetime.utcnow() - timedelta(hours=72)
+    timestamps, temperatures = [], []
+
+    with open(DATA_FILE, 'r') as file:
+        data = json.load(file)
+        for entry in data:
+            for record in entry['data']:
+                ts = datetime.utcfromtimestamp(record['dt'])
+                if ts >= cutoff_time:
+                    timestamps.append(ts)
+                    temperatures.append(record['temp'])
+
+    if not timestamps:
+        print("No data available for the last 72 hours!")
+        return
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(3.6, 0.9), dpi=100)
+    fig.patch.set_facecolor('black')
+    ax.set_facecolor('black')
+
+    ax.plot(timestamps, temperatures, color='salmon', linewidth=0.5)
+
+    # X-axis: align to full days
+    cutoff_time = (datetime.utcnow() - timedelta(hours=72)).replace(hour=0, minute=0, second=0, microsecond=0)
+    end_time = (datetime.utcnow() + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+
+    ax.set_xlim([cutoff_time, end_time])
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    ax.xaxis.set_major_locator(mdates.HourLocator(byhour=[0, 12]))
+    plt.setp(ax.get_xticklabels(), rotation=0, ha='center', color='white')
+
+    # Day separators at midnight (skip first one at y-axis)
+    current = cutoff_time + timedelta(days=1)
+    while current <= end_time:
+        ax.axvline(x=current, color='white', linestyle='dotted', linewidth=0.5)
+        current += timedelta(days=1)
+
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    ax.xaxis.set_major_locator(mdates.HourLocator(byhour=[0, 12]))
+    plt.setp(ax.get_xticklabels(), rotation=0, ha='center', color='white')
+
+    # Day separators and labels
+    start_date, end_date = timestamps[0].date(), timestamps[-1].date()
+    dates = [start_date + timedelta(days=n) for n in range((end_date - start_date).days + 2)]
+
+    # Limit to 3 last days for cleaner layout
+    if len(dates) > 4:
+        dates = dates[-4:]
+
+    for i, d in enumerate(dates):
+        if i > 0:  # skip very first line to avoid clash with Y axis
+            ax.axvline(x=d, color='white', linestyle='dotted', linewidth=0.5)
+
+    for i in range(len(dates) - 1):
+        midpoint = datetime.combine(dates[i], datetime.min.time()) + timedelta(hours=12)
+        day_name = dates[i].strftime('%a')
+        ax.text(mdates.date2num(midpoint),
+                (ax.get_ylim()[0] + ax.get_ylim()[1]) / 2,  # vertical middle
+                day_name, color='white', alpha=0.25,
+                fontsize=14, ha='center', va='center', zorder=1)
+
+    # Y-axis formatting
+    ax.yaxis.set_major_formatter(StrMethodFormatter(u"{x:.1f} °C"))
+    ax.tick_params(axis='x', labelsize=8, colors='white')
+    ax.tick_params(axis='y', labelsize=8, colors='white')
+
+    # Grid
+    ax.grid(which='major', axis='both', color='grey', linestyle='dotted', linewidth=0.4)
+
+    # Save directly (no Pillow margin step needed anymore)
+    plt.savefig(OUTPUT_FILE, facecolor='black', dpi=100, bbox_inches='tight', pad_inches=0.05)
+    plt.close(fig)
+
+    print(f"Graph saved as {OUTPUT_FILE}")
+
+
+if __name__ == "__main__":
+    plot_temperature()

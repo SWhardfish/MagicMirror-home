@@ -1,0 +1,8 @@
+{
+  "name": "MMM-Receptbok",
+  "version": "1.0.0",
+  "description": "Kitchen Recipe Image Display Module for MagicMirror",
+  "dependencies": {
+    "onoff": "^6.0.0"
+  }
+}
