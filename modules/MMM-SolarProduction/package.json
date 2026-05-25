@@ -1,0 +1,9 @@
+{
+  "name": "mmm-solarproduction",
+  "version": "1.0.0",
+  "description": "MagicMirror module for displaying building solar panel production",
+  "main": "node_helper.js",
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}

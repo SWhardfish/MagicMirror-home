@@ -1,0 +1,227 @@
+[     180ms] [INFO] Initializing MagicMirror². @ http://192.168.1.208:8080/js/main.js:584
+[     180ms] [LOG] Loading core translation file: translations/en.json @ http://192.168.1.208:8080/js/translator.js:115
+[     232ms] [LOG] Loading core translation fallback file: translations/en.json @ http://192.168.1.208:8080/js/translator.js:131
+[     275ms] [LOG] Load script: modules/default/alert/alert.js @ http://192.168.1.208:8080/js/loader.js:178
+[     292ms] [LOG] Module registered: alert @ http://192.168.1.208:8080/js/module.js:488
+[     292ms] [INFO] Bootstrapping module: alert @ http://192.168.1.208:8080/js/loader.js:151
+[     293ms] [LOG] Load script: modules/default/alert/notificationFx.js @ http://192.168.1.208:8080/js/loader.js:178
+[     313ms] [LOG] Scripts loaded for: alert @ http://192.168.1.208:8080/js/loader.js:155
+[     313ms] [LOG] Load stylesheet: css/font-awesome.css @ http://192.168.1.208:8080/js/loader.js:194
+[     351ms] [LOG] Load stylesheet: modules/default/alert/./styles/notificationFx.css @ http://192.168.1.208:8080/js/loader.js:194
+[     362ms] [LOG] Load stylesheet: modules/default/alert/./styles/center.css @ http://192.168.1.208:8080/js/loader.js:194
+[     376ms] [LOG] Styles loaded for: alert @ http://192.168.1.208:8080/js/loader.js:158
+[     376ms] [LOG] alert - Load translation: translations/en.json @ http://192.168.1.208:8080/js/translator.js:98
+[     392ms] [LOG] alert - Load translation fallback: translations/bg.json @ http://192.168.1.208:8080/js/translator.js:98
+[     411ms] [LOG] Translations loaded for: alert @ http://192.168.1.208:8080/js/loader.js:161
+[     411ms] [LOG] Load script: modules/default/clock/clock.js @ http://192.168.1.208:8080/js/loader.js:178
+[     427ms] [LOG] Module registered: clock @ http://192.168.1.208:8080/js/module.js:488
+[     428ms] [INFO] Bootstrapping module: clock @ http://192.168.1.208:8080/js/loader.js:151
+[     428ms] [LOG] Load script: node_modules/moment/min/moment-with-locales.js @ http://192.168.1.208:8080/js/loader.js:178
+[     454ms] [LOG] Load script: node_modules/moment-timezone/builds/moment-timezone-with-data.js @ http://192.168.1.208:8080/js/loader.js:178
+[     470ms] [LOG] Load script: node_modules/suncalc/suncalc.js @ http://192.168.1.208:8080/js/loader.js:178
+[     483ms] [LOG] Scripts loaded for: clock @ http://192.168.1.208:8080/js/loader.js:155
+[     483ms] [LOG] Load stylesheet: modules/default/clock/clock_styles.css @ http://192.168.1.208:8080/js/loader.js:194
+[     495ms] [LOG] Styles loaded for: clock @ http://192.168.1.208:8080/js/loader.js:158
+[     495ms] [LOG] Translations loaded for: clock @ http://192.168.1.208:8080/js/loader.js:161
+[     495ms] [LOG] Load script: modules/MMM-RestaurangTavla/MMM-RestaurangTavla.js @ http://192.168.1.208:8080/js/loader.js:178
+[     514ms] [LOG] Module registered: MMM-RestaurangTavla @ http://192.168.1.208:8080/js/module.js:488
+[     514ms] [INFO] Bootstrapping module: MMM-RestaurangTavla @ http://192.168.1.208:8080/js/loader.js:151
+[     514ms] [LOG] Scripts loaded for: MMM-RestaurangTavla @ http://192.168.1.208:8080/js/loader.js:155
+[     515ms] [LOG] Styles loaded for: MMM-RestaurangTavla @ http://192.168.1.208:8080/js/loader.js:158
+[     515ms] [LOG] Translations loaded for: MMM-RestaurangTavla @ http://192.168.1.208:8080/js/loader.js:161
+[     515ms] [LOG] Load script: modules/MMM-SL/MMM-SL.js @ http://192.168.1.208:8080/js/loader.js:178
+[     528ms] [LOG] Module registered: MMM-SL @ http://192.168.1.208:8080/js/module.js:488
+[     528ms] [INFO] Bootstrapping module: MMM-SL @ http://192.168.1.208:8080/js/loader.js:151
+[     528ms] [LOG] Scripts loaded for: MMM-SL @ http://192.168.1.208:8080/js/loader.js:155
+[     528ms] [LOG] File already loaded: font-awesome.css @ http://192.168.1.208:8080/js/loader.js:247
+[     529ms] [LOG] Load stylesheet: modules/MMM-SL/css/mmm-sl.css @ http://192.168.1.208:8080/js/loader.js:194
+[     544ms] [LOG] Styles loaded for: MMM-SL @ http://192.168.1.208:8080/js/loader.js:158
+[     545ms] [LOG] Translations loaded for: MMM-SL @ http://192.168.1.208:8080/js/loader.js:161
+[     545ms] [LOG] Load script: modules/default/calendar/calendar.js @ http://192.168.1.208:8080/js/loader.js:178
+[     563ms] [LOG] Check MagicMirror² version for module 'calendar' - Minimum version:  2.1.0 - Current version: 2.32.0 @ http://192.168.1.208:8080/js/module.js:480
+[     563ms] [LOG] Version is ok! @ http://192.168.1.208:8080/js/module.js:482
+[     564ms] [LOG] Module registered: calendar @ http://192.168.1.208:8080/js/module.js:488
+[     564ms] [INFO] Bootstrapping module: calendar @ http://192.168.1.208:8080/js/loader.js:151
+[     564ms] [LOG] Load script: modules/default/calendar/calendarutils.js @ http://192.168.1.208:8080/js/loader.js:178
+[     581ms] [LOG] File already loaded: moment.js @ http://192.168.1.208:8080/js/loader.js:247
+[     581ms] [LOG] File already loaded: moment-timezone.js @ http://192.168.1.208:8080/js/loader.js:247
+[     581ms] [LOG] Scripts loaded for: calendar @ http://192.168.1.208:8080/js/loader.js:155
+[     581ms] [LOG] Styles loaded for: calendar @ http://192.168.1.208:8080/js/loader.js:158
+[     581ms] [LOG] Translations loaded for: calendar @ http://192.168.1.208:8080/js/loader.js:161
+[     581ms] [LOG] Load script: modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js @ http://192.168.1.208:8080/js/loader.js:178
+[     597ms] [LOG] Check MagicMirror² version for module 'MMM-OpenWeatherForecast' - Minimum version:  2.2.0 - Current version: 2.32.0 @ http://192.168.1.208:8080/js/module.js:480
+[     597ms] [LOG] Version is ok! @ http://192.168.1.208:8080/js/module.js:482
+[     597ms] [LOG] Module registered: MMM-OpenWeatherForecast @ http://192.168.1.208:8080/js/module.js:488
+[     598ms] [INFO] Bootstrapping module: MMM-OpenWeatherForecast @ http://192.168.1.208:8080/js/loader.js:151
+[     598ms] [LOG] File already loaded: moment.js @ http://192.168.1.208:8080/js/loader.js:247
+[     598ms] [LOG] Load script: modules/MMM-OpenWeatherForecast/skycons.js @ http://192.168.1.208:8080/js/loader.js:178
+[     612ms] [LOG] Load script: modules/MMM-OpenWeatherForecast/chart.min.js @ http://192.168.1.208:8080/js/loader.js:178
+[     635ms] [LOG] Load script: modules/MMM-OpenWeatherForecast/chartjs-adapter-date-fns.bundle.min.js @ http://192.168.1.208:8080/js/loader.js:178
+[     654ms] [LOG] Scripts loaded for: MMM-OpenWeatherForecast @ http://192.168.1.208:8080/js/loader.js:155
+[     655ms] [LOG] Load stylesheet: modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.css @ http://192.168.1.208:8080/js/loader.js:194
+[     666ms] [LOG] Styles loaded for: MMM-OpenWeatherForecast @ http://192.168.1.208:8080/js/loader.js:158
+[     666ms] [LOG] Translations loaded for: MMM-OpenWeatherForecast @ http://192.168.1.208:8080/js/loader.js:161
+[     666ms] [LOG] Load script: modules/MMM-SolarProduction/MMM-SolarProduction.js @ http://192.168.1.208:8080/js/loader.js:178
+[     683ms] [LOG] Module registered: MMM-SolarProduction @ http://192.168.1.208:8080/js/module.js:488
+[     684ms] [INFO] Bootstrapping module: MMM-SolarProduction @ http://192.168.1.208:8080/js/loader.js:151
+[     685ms] [LOG] Load script: /modules/MMM-OpenWeatherForecast/chart.min.js @ http://192.168.1.208:8080/js/loader.js:178
+[     702ms] [LOG] Load script: /modules/MMM-OpenWeatherForecast/chartjs-adapter-date-fns.bundle.min.js @ http://192.168.1.208:8080/js/loader.js:178
+[     718ms] [LOG] Scripts loaded for: MMM-SolarProduction @ http://192.168.1.208:8080/js/loader.js:155
+[     718ms] [LOG] Load stylesheet: modules/MMM-SolarProduction/MMM-SolarProduction.css @ http://192.168.1.208:8080/js/loader.js:194
+[     730ms] [LOG] Styles loaded for: MMM-SolarProduction @ http://192.168.1.208:8080/js/loader.js:158
+[     730ms] [LOG] Translations loaded for: MMM-SolarProduction @ http://192.168.1.208:8080/js/loader.js:161
+[     730ms] [LOG] Load script: modules/default/newsfeed/newsfeed.js @ http://192.168.1.208:8080/js/loader.js:178
+[     746ms] [LOG] Module registered: newsfeed @ http://192.168.1.208:8080/js/module.js:488
+[     746ms] [INFO] Bootstrapping module: newsfeed @ http://192.168.1.208:8080/js/loader.js:151
+[     746ms] [LOG] File already loaded: moment.js @ http://192.168.1.208:8080/js/loader.js:247
+[     746ms] [LOG] Scripts loaded for: newsfeed @ http://192.168.1.208:8080/js/loader.js:155
+[     746ms] [LOG] Load stylesheet: modules/default/newsfeed/newsfeed.css @ http://192.168.1.208:8080/js/loader.js:194
+[     764ms] [LOG] Styles loaded for: newsfeed @ http://192.168.1.208:8080/js/loader.js:158
+[     764ms] [LOG] Translations loaded for: newsfeed @ http://192.168.1.208:8080/js/loader.js:161
+[     764ms] [LOG] Load script: modules/MMM-LCDScheduler/MMM-LCDScheduler.js @ http://192.168.1.208:8080/js/loader.js:178
+[     780ms] [LOG] Module registered: MMM-LCDScheduler @ http://192.168.1.208:8080/js/module.js:488
+[     780ms] [INFO] Bootstrapping module: MMM-LCDScheduler @ http://192.168.1.208:8080/js/loader.js:151
+[     780ms] [LOG] Scripts loaded for: MMM-LCDScheduler @ http://192.168.1.208:8080/js/loader.js:155
+[     780ms] [LOG] Styles loaded for: MMM-LCDScheduler @ http://192.168.1.208:8080/js/loader.js:158
+[     780ms] [LOG] Translations loaded for: MMM-LCDScheduler @ http://192.168.1.208:8080/js/loader.js:161
+[     780ms] [LOG] Load script: modules/MMM-Receptbok/MMM-Receptbok.js @ http://192.168.1.208:8080/js/loader.js:178
+[     799ms] [LOG] Module registered: MMM-Receptbok @ http://192.168.1.208:8080/js/module.js:488
+[     799ms] [INFO] Bootstrapping module: MMM-Receptbok @ http://192.168.1.208:8080/js/loader.js:151
+[     799ms] [LOG] Scripts loaded for: MMM-Receptbok @ http://192.168.1.208:8080/js/loader.js:155
+[     800ms] [LOG] Load stylesheet: modules/MMM-Receptbok/MMM-Receptbok.css @ http://192.168.1.208:8080/js/loader.js:194
+[     813ms] [LOG] Styles loaded for: MMM-Receptbok @ http://192.168.1.208:8080/js/loader.js:158
+[     813ms] [LOG] Translations loaded for: MMM-Receptbok @ http://192.168.1.208:8080/js/loader.js:161
+[     813ms] [LOG] Load stylesheet: css/custom.css @ http://192.168.1.208:8080/js/loader.js:194
+[     826ms] [INFO] Starting module: alert @ http://192.168.1.208:8080/modules/default/alert/alert.js:42
+[     826ms] [INFO] Starting module: clock @ http://192.168.1.208:8080/modules/default/clock/clock.js:42
+[     826ms] [INFO] MMM-SL starting... @ http://192.168.1.208:8080/modules/MMM-SL/MMM-SL.js:29
+[     829ms] [INFO] Starting module: calendar @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:96
+[     830ms] [WARNING] Your are using the deprecated config values 'coloredSymbolOnly'. Please switch to 'coloredSymbol' & 'coloredText'! @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:104
+[     835ms] [INFO] Starting module: MMM-OpenWeatherForecast @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:315
+[     836ms] [INFO] Starting module: newsfeed @ http://192.168.1.208:8080/modules/default/newsfeed/newsfeed.js:66
+[     837ms] [LOG] MMM-LCDScheduler: Module started @ http://192.168.1.208:8080/modules/MMM-LCDScheduler/MMM-LCDScheduler.js:6
+[     837ms] [INFO] Starting module: MMM-Receptbok @ http://192.168.1.208:8080/modules/MMM-Receptbok/MMM-Receptbok.js:10
+[     838ms] [INFO] All modules started! @ http://192.168.1.208:8080/js/main.js:603
+[     842ms] [INFO] sorting events count=0 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[     843ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[     859ms] [INFO] MMM-SL: Schedule data loaded {schedules: Array(2)} @ http://192.168.1.208:8080/modules/MMM-SL/MMM-SL.js:429
+[     926ms] [INFO] MMM-OpenWeatherForecast DOM ready, will request chart data when weather data is available @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:476
+[    1180ms] [INFO] sorting events count=6 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    1182ms] [INFO] sorting events count=6 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    1182ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[    1187ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    1187ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    1189ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    1191ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    1192ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[    1193ms] [INFO] not full day but within getrelative size @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:500
+[    1196ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    1197ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    1198ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    1377ms] [LOG] MMM-LCDScheduler: Scheduler initialized @ http://192.168.1.208:8080/modules/MMM-LCDScheduler/MMM-LCDScheduler.js:22
+[    1378ms] [INFO] MMM-Receptbok: Loaded 11 recipes @ http://192.168.1.208:8080/modules/MMM-Receptbok/MMM-Receptbok.js:300
+[    3426ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    3427ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    3427ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[    3428ms] [INFO] not full day but within getrelative size @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:500
+[    3428ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    3429ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    3429ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    3475ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    3475ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    3475ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[    3476ms] [INFO] not full day but within getrelative size @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:500
+[    3476ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    3476ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    3477ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    3926ms] [INFO] MMM-OpenWeatherForecast Waiting for weather data before requesting chart... @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:488
+[    5728ms] [LOG]  ================== Adding icon: cloudy, true @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:1327
+[    5729ms] [LOG] [MMM-OpenWeatherForecast] Processing pending chart request after weather data arrived @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:531
+[    6385ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    6387ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    6387ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[    6387ms] [INFO] not full day but within getrelative size @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:500
+[    6389ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    6390ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    6390ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    6398ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    6399ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    6400ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[    6400ms] [INFO] not full day but within getrelative size @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:500
+[    6402ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    6403ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    6404ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    6432ms] [LOG] [MMM-OpenWeatherForecast] Graph data request sent to node_helper @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:570
+[    6808ms] [LOG] MMM-LCDScheduler: Scheduler initialized @ http://192.168.1.208:8080/modules/MMM-LCDScheduler/MMM-LCDScheduler.js:22
+[    6808ms] [INFO] MMM-Receptbok: Loaded 11 recipes @ http://192.168.1.208:8080/modules/MMM-Receptbok/MMM-Receptbok.js:300
+[    6841ms] [LOG] [MMM-OpenWeatherForecast] Received graph data, rendering chart @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:598
+[    7244ms] [LOG] =============== Adding animated icon skycon_main: 'cloudy' @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:1356
+[    7348ms] [LOG] [MMM-OpenWeatherForecast] Canvas found, rendering chart (attempt 1) @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:608
+[    7349ms] [LOG] [MMM-OpenWeatherForecast] Starting chart render (FIRST, previous: 0, new: 1779704132039) @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:696
+[    7374ms] [LOG] [MMM-OpenWeatherForecast] Chart.js temperature chart rendered with 524 data points @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:934
+[    8583ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    8584ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    8584ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[    8585ms] [INFO] not full day but within getrelative size @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:500
+[    8586ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    8587ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    8587ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    8709ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    8710ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[    8711ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[    8711ms] [INFO] not full day but within getrelative size @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:500
+[    8712ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    8714ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    8714ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[    9276ms] [LOG]  ================== Adding icon: cloudy, true @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:1327
+[    9278ms] [LOG] [MMM-OpenWeatherForecast] Graph data request skipped (last request 3s ago, minimum interval is 30 min) @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:551
+[    9668ms] [LOG] [MMM-OpenWeatherForecast] Received graph data, rendering chart @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:598
+[   10090ms] [LOG] [MMM-OpenWeatherForecast] Re-rendering chart with existing data after DOM update @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:555
+[   10090ms] [LOG] [MMM-OpenWeatherForecast] Starting chart render (UPDATE, previous: 1779704132039, new: 1779704134781) @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:696
+[   10113ms] [LOG] [MMM-OpenWeatherForecast] Chart.js temperature chart rendered with 525 data points @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:934
+[   10173ms] [LOG] [MMM-OpenWeatherForecast] Canvas found, rendering chart (attempt 1) @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:608
+[   10173ms] [LOG] [MMM-OpenWeatherForecast] Starting chart render (UPDATE, previous: 1779704134781, new: 1779704134864) @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:696
+[   10199ms] [LOG] [MMM-OpenWeatherForecast] Chart.js temperature chart rendered with 525 data points @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:934
+[   10787ms] [LOG] =============== Adding animated icon skycon_main: 'cloudy' @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:1356
+[   95338ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[   95339ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[   95339ms] [INFO] not full day but within getrelative size @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:500
+[   95341ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[   95342ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[   95342ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  155342ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[  155342ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[  155342ms] [INFO] not full day but within getrelative size @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:500
+[  155343ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  155343ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  155344ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  215356ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[  215356ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[  215357ms] [INFO] not full day but within getrelative size @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:500
+[  215358ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  215359ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  215360ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  275355ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[  275355ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[  275356ms] [INFO] not full day but within getrelative size @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:500
+[  275357ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  275358ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  275358ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  335360ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[  335360ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[  335361ms] [INFO] not full day but within getrelative size @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:500
+[  335361ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  335361ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  335361ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  395369ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[  395369ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[  395369ms] [INFO] not full day but within getrelative size @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:500
+[  395369ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  395370ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  395370ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  455379ms] [INFO] sorting events count=11 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:695
+[  455379ms] [INFO] slicing events total maxcount=16 @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:735
+[  455380ms] [INFO] not full day but within getrelative size @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:500
+[  455384ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  455387ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498
+[  455388ms] [INFO] event fullday @ http://192.168.1.208:8080/modules/default/calendar/calendar.js:498

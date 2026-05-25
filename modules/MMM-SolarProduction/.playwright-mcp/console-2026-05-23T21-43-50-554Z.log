@@ -1,0 +1,1 @@
+[    1098ms] [LOG] [MMM-OpenWeatherForecast] Chart canvas not found in DOM, retrying in 2 seconds... @ http://192.168.1.208:8080/modules/MMM-OpenWeatherForecast/MMM-OpenWeatherForecast.js:655
