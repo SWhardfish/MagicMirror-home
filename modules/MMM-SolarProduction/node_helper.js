@@ -5,6 +5,7 @@ var path = require("path");
 
 var DATA_FILE = path.resolve(__dirname, "solar_data.json");
 var DAILY_FILE = path.resolve(__dirname, "daily_data.json");
+var MONTHLY_FILE = path.resolve(__dirname, "monthly_data.json");
 
 module.exports = NodeHelper.create({
   start: function () {
@@ -15,6 +16,9 @@ module.exports = NodeHelper.create({
     }
     if (!fs.existsSync(DAILY_FILE)) {
       fs.writeFileSync(DAILY_FILE, JSON.stringify([]));
+    }
+    if (!fs.existsSync(MONTHLY_FILE)) {
+      fs.writeFileSync(MONTHLY_FILE, JSON.stringify([]));
     }
 
     this.fetchTimer = null;
@@ -48,11 +52,14 @@ module.exports = NodeHelper.create({
         if (parsed) {
           self.saveReading(parsed.currentPower);
           self.saveDailyReading(parsed);
+          self.saveMonthlyReading(parsed);
           var readings = self.getReadings();
           var dailyReadings = self.getDailyReadings();
+          var monthlyReadings = self.getMonthlyReadings();
           self.sendSocketNotification("SOLAR_DATA", {
             readings: readings,
             dailyReadings: dailyReadings,
+            monthlyReadings: monthlyReadings,
             stats: parsed
           });
           console.log("[MMM-SolarProduction] Data updated: " + parsed.currentPower + " kW");
@@ -62,10 +69,12 @@ module.exports = NodeHelper.create({
         console.error("[MMM-SolarProduction] Fetch error: " + error.message);
         var readings = self.getReadings();
         var dailyReadings = self.getDailyReadings();
+        var monthlyReadings = self.getMonthlyReadings();
         if (readings.length > 0) {
           self.sendSocketNotification("SOLAR_DATA", {
             readings: readings,
             dailyReadings: dailyReadings,
+            monthlyReadings: monthlyReadings,
             stats: null
           });
         }
@@ -104,11 +113,13 @@ module.exports = NodeHelper.create({
       }
 
       var monthlyKwh = [];
+      var monthlyLabels = [];
       if (monthlySection) {
-        var monthRegex = /<span class=['"]production-value['"]>([\d.]+)<\/span> kWh/g;
+        var monthRegex = /<td class=['"]label['"]>([^<]+)<\/td><td><span class=['"]production-value['"]>([\d.]+)<\/span> kWh<\/td>/g;
         var mMatch;
         while ((mMatch = monthRegex.exec(monthlySection)) !== null) {
-          monthlyKwh.push(parseFloat(mMatch[1]));
+          monthlyLabels.push(mMatch[1].trim());
+          monthlyKwh.push(parseFloat(mMatch[2]));
         }
       }
 
@@ -120,7 +131,8 @@ module.exports = NodeHelper.create({
         lastContact: lastContact,
         days: days,
         yesterdayKwh: days.length > 0 ? days[0].value : 0,
-        monthlyKwh: monthlyKwh
+        monthlyKwh: monthlyKwh,
+        monthlyLabels: monthlyLabels
       };
 
       return result;
@@ -188,6 +200,37 @@ module.exports = NodeHelper.create({
     }
   },
 
+  saveMonthlyReading: function (parsed) {
+    try {
+      if (!parsed.monthlyLabels || parsed.monthlyLabels.length === 0) return;
+      var monthly = JSON.parse(fs.readFileSync(MONTHLY_FILE, "utf8"));
+
+      for (var i = 0; i < parsed.monthlyLabels.length; i++) {
+        var label = parsed.monthlyLabels[i];
+        var kwh = parsed.monthlyKwh[i];
+        var exists = false;
+        for (var j = 0; j < monthly.length; j++) {
+          if (monthly[j].label === label) {
+            // Update in case partial month value grew
+            monthly[j].kwh = kwh;
+            exists = true;
+            break;
+          }
+        }
+        if (!exists) {
+          monthly.push({ label: label, kwh: kwh });
+          console.log("[MMM-SolarProduction] Saved monthly: " + label + " = " + kwh + " kWh");
+        }
+      }
+
+      // Keep sorted oldest-first by label (YYYY-MM natural sort works for "April 2026" etc via index)
+      // Labels from source are newest-first, so just sort by index position stability
+      fs.writeFileSync(MONTHLY_FILE, JSON.stringify(monthly));
+    } catch (e) {
+      console.error("[MMM-SolarProduction] Monthly save error: " + e.message);
+    }
+  },
+
   getReadings: function () {
     try {
       if (fs.existsSync(DATA_FILE)) {
@@ -206,6 +249,17 @@ module.exports = NodeHelper.create({
       }
     } catch (e) {
       console.error("[MMM-SolarProduction] Daily read error: " + e.message);
+    }
+    return [];
+  },
+
+  getMonthlyReadings: function () {
+    try {
+      if (fs.existsSync(MONTHLY_FILE)) {
+        return JSON.parse(fs.readFileSync(MONTHLY_FILE, "utf8"));
+      }
+    } catch (e) {
+      console.error("[MMM-SolarProduction] Monthly read error: " + e.message);
     }
     return [];
   }

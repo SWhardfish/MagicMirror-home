@@ -72,27 +72,26 @@ Module.register("MMM-SolarProduction", {
     statsRow.className = "solar-stats";
 
     if (stats) {
-      var todayStr = "Idag: <span class=\"value\">" + Math.round(stats.todayKwh) + " kWh</span>";
-      var yesterdayStr = "Igår: <span class=\"value\">" + Math.round(stats.yesterdayKwh) + " kWh</span>";
-      var monthVal = stats.monthlyKwh && stats.monthlyKwh.length > 0 ? stats.monthlyKwh[0] : 0;
-      var monthStr;
-      if (monthVal >= 1000) {
-        monthStr = "Månad: <span class=\"value\">" + (monthVal / 1000).toFixed(1) + " MWh</span>";
-      } else {
-        monthStr = "Månad: <span class=\"value\">" + Math.round(monthVal) + " kWh</span>";
+      // Left side: Idag + Igår
+      var leftSpan = document.createElement("span");
+      leftSpan.className = "solar-stats-left";
+      leftSpan.innerHTML = "Idag: <span class=\"value\">" + Math.round(stats.todayKwh) + " kWh</span>" +
+        " &nbsp; Igår: <span class=\"value\">" + Math.round(stats.yesterdayKwh) + " kWh</span>";
+      statsRow.appendChild(leftSpan);
+
+      // Right side: rolling monthly history oldest→newest, ending with MWh unit
+      var monthlyReadings = this.solarData.monthlyReadings || [];
+      if (monthlyReadings.length > 0) {
+        var sorted = monthlyReadings.slice();
+        var parts = [];
+        for (var m = 0; m < sorted.length; m++) {
+          parts.push((sorted[m].kwh / 1000).toFixed(1));
+        }
+        var rightSpan = document.createElement("span");
+        rightSpan.className = "solar-stats-right";
+        rightSpan.innerHTML = "<span class=\"value\">" + parts.join(" | ") + "</span> MWh";
+        statsRow.appendChild(rightSpan);
       }
-
-      var todaySpan = document.createElement("span");
-      todaySpan.innerHTML = todayStr;
-      statsRow.appendChild(todaySpan);
-
-      var yesterdaySpan = document.createElement("span");
-      yesterdaySpan.innerHTML = yesterdayStr;
-      statsRow.appendChild(yesterdaySpan);
-
-      var monthSpan = document.createElement("span");
-      monthSpan.innerHTML = monthStr;
-      statsRow.appendChild(monthSpan);
     }
     wrapper.appendChild(statsRow);
 
