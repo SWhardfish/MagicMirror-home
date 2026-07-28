@@ -31,7 +31,7 @@ Module.register("MMM-SolarProduction", {
     if (!this.solarData) {
       var placeholder = document.createElement("div");
       placeholder.className = "solar-placeholder";
-      placeholder.innerHTML = "V&auml;ntar p&aring; soldata...";
+      placeholder.innerHTML = "Waiting for solar data...";
       wrapper.appendChild(placeholder);
       return wrapper;
     }
@@ -41,7 +41,7 @@ Module.register("MMM-SolarProduction", {
 
     var title = document.createElement("span");
     title.className = "solar-title";
-    title.textContent = "Solceller";
+    title.textContent = "Solar";
     header.appendChild(title);
 
     var currentDiv = document.createElement("div");
@@ -72,24 +72,32 @@ Module.register("MMM-SolarProduction", {
     statsRow.className = "solar-stats";
 
     if (stats) {
-      // Left side: Idag + Igår
+      // Left side: Today + Yesterday
       var leftSpan = document.createElement("span");
       leftSpan.className = "solar-stats-left";
-      leftSpan.innerHTML = "Idag: <span class=\"value\">" + Math.round(stats.todayKwh) + " kWh</span>" +
-        " &nbsp; Igår: <span class=\"value\">" + Math.round(stats.yesterdayKwh) + " kWh</span>";
+      leftSpan.innerHTML = "Today: <span class=\"value\">" + Math.round(stats.todayKwh) + " kWh</span>" +
+        " &nbsp; Yesterday: <span class=\"value\">" + Math.round(stats.yesterdayKwh) + " kWh</span>";
       statsRow.appendChild(leftSpan);
 
-      // Right side: rolling monthly history oldest→newest, ending with MWh unit
+      // Right side: monthly history newest→oldest with 3-letter month abbreviations
       var monthlyReadings = this.solarData.monthlyReadings || [];
       if (monthlyReadings.length > 0) {
-        var sorted = monthlyReadings.slice();
+        var svToEn = {
+          "Januari": "Jan", "Februari": "Feb", "Mars": "Mar", "April": "Apr",
+          "Maj": "May", "Juni": "Jun", "Juli": "Jul", "Augusti": "Aug",
+          "September": "Sep", "Oktober": "Oct", "November": "Nov", "December": "Dec"
+        };
+        var reversed = monthlyReadings.slice().reverse().slice(0, 3);
         var parts = [];
-        for (var m = 0; m < sorted.length; m++) {
-          parts.push((sorted[m].kwh / 1000).toFixed(1));
+        for (var m = 0; m < reversed.length; m++) {
+          var label = reversed[m].label || "";
+          var monthWord = label.split(" ")[0];
+          var abbr = svToEn[monthWord] || monthWord.substring(0, 3);
+          parts.push(abbr + " <span class=\"value\">" + (reversed[m].kwh / 1000).toFixed(1) + "</span>");
         }
         var rightSpan = document.createElement("span");
         rightSpan.className = "solar-stats-right";
-        rightSpan.innerHTML = "<span class=\"value\">" + parts.join(" | ") + "</span> MWh";
+        rightSpan.innerHTML = parts.join(" | ") + " MWh";
         statsRow.appendChild(rightSpan);
       }
     }
@@ -99,7 +107,74 @@ Module.register("MMM-SolarProduction", {
   },
 
   notificationReceived: function (notification) {
-    if (notification === "DOM_OBJECTS_CREATED") {}
+    if (notification === "DOM_OBJECTS_CREATED") {
+      this.startCalendarPositioner();
+      this.setupAlertTicker();
+    }
+  },
+
+  setupAlertTicker: function () {
+    // Watch for alert elements being added/changed and wrap description
+    // in a doubled-text ticker so the CSS -50% loop is seamless.
+    var self = this;
+    var wrapAlerts = function () {
+      var alerts = document.querySelectorAll(".MMM-OpenWeatherForecast .weather-alert");
+      for (var i = 0; i < alerts.length; i++) {
+        var alertEl = alerts[i];
+        if (alertEl.getAttribute("data-ticker-init")) continue;
+        alertEl.setAttribute("data-ticker-init", "1");
+
+        var descEl = alertEl.querySelector(".weather-alert-description");
+        if (!descEl) continue;
+
+        var text = descEl.textContent.trim();
+        if (!text) continue;
+
+        // Build: [clip container] > [description with text doubled, separated by gap]
+        var ticker = document.createElement("span");
+        ticker.className = "weather-alert-ticker";
+
+        descEl.innerHTML = text + "   —   " + text;
+        ticker.appendChild(descEl);
+        alertEl.appendChild(ticker);
+      }
+    };
+
+    // Run once on load and watch for future DOM changes (alert appearing/updating)
+    wrapAlerts();
+    var observer = new MutationObserver(wrapAlerts);
+    var forecastEl = document.querySelector(".MMM-OpenWeatherForecast");
+    if (forecastEl) {
+      observer.observe(forecastEl, { childList: true, subtree: true });
+    }
+  },
+
+  startCalendarPositioner: function () {
+    var calEl = document.querySelector(".calendar-fixed");
+    if (!calEl) return;
+
+    var titleEl = calEl.querySelector(".module-header");
+    var rightRegion = document.querySelector(".region.top.right");
+    var leftRegion = document.querySelector(".region.top.left");
+
+    function reposition() {
+      // offsetTop + offsetHeight gives the bottom edge relative to offsetParent (body),
+      // which matches the coordinate space of our position:absolute calendar.
+      var rightBottom = rightRegion ? (rightRegion.offsetTop + rightRegion.offsetHeight) : 0;
+      var leftBottom = leftRegion ? (leftRegion.offsetTop + leftRegion.offsetHeight) : 0;
+      var columnBottom = Math.max(rightBottom, leftBottom);
+
+      var titleHeight = titleEl ? titleEl.offsetHeight : 30;
+      var gap = Math.max(titleHeight, 14);
+
+      calEl.style.top = (columnBottom + gap) + "px";
+    }
+
+    reposition();
+
+    var observer = new ResizeObserver(reposition);
+    if (rightRegion) observer.observe(rightRegion);
+    if (leftRegion) observer.observe(leftRegion);
   },
 
   socketNotificationReceived: function (notification, payload) {
@@ -158,9 +233,11 @@ Module.register("MMM-SolarProduction", {
       }
     }
 
-    // x2 axis spans the full bar history
-    var x2Min = barData.length > 0 ? barData[0].x - 12 * 3600 * 1000 : startTime;
-    var x2Max = barData.length > 0 ? barData[barData.length - 1].x + 12 * 3600 * 1000 : endTime;
+    // x2 axis: fixed 31-day window ending today so all slots are pre-reserved
+    var todayForAxis = new Date();
+    var todayNoonForAxis = new Date(todayForAxis.getFullYear(), todayForAxis.getMonth(), todayForAxis.getDate(), 12, 0, 0, 0).getTime();
+    var x2Max = todayNoonForAxis + 12 * 3600 * 1000;
+    var x2Min = todayNoonForAxis - 30 * 24 * 3600 * 1000 - 12 * 3600 * 1000;
 
     if (this.chartInstance) {
       try { this.chartInstance.destroy(); this.chartInstance = null; } catch (e) {}
@@ -283,8 +360,8 @@ Module.register("MMM-SolarProduction", {
               for (var b = 0; b < barData.length; b++) {
                 if (barData[b].y > maxKwh) maxKwh = barData[b].y;
               }
-              // Round up to nearest 500 kWh so ticks land on clean MWh values
-              return Math.max(Math.ceil(maxKwh / 500) * 500, 500);
+              // tallest bar sits at ~91% of chart height
+              return Math.round(Math.max(maxKwh, 100) * 1.1);
             })(),
             position: "right",
             display: barData.length > 0,

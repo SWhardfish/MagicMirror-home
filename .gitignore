@@ -1,1 +1,28 @@
+# Secrets — NEVER commit these
+config/config.js
+config/config.js.InfoCentral
+config/config.js.ORG*
+config/configNOPASS.js
+
+# Runtime data files
+modules/MMM-SolarProduction/solar_data.json
+modules/MMM-OpenWeatherForecast/weather_data.json
+
+# Node dependencies
+node_modules/
+
+# Logs and debug artifacts
+*.log
+*.stackdump
+mm_monitor.log
+
+# Debug screenshots (but NOT real module image assets)
+temp*.png
+verify-*.png
+modules/MMM-SolarProduction/.playwright-mcp/
+
+# IDE and tool state
+.claude/
+.superpowers/
+.idea/
 .worktrees/
