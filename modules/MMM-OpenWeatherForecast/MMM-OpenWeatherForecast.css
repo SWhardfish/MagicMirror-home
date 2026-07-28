@@ -371,32 +371,6 @@
   /* Opacity controlled by inline style - starts at 0, set to 1 when loaded */
 }
 
-.owf-graph-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 1px;
-}
-
-.owf-graph-title {
-  font-size: 14px;
-  text-transform: uppercase;
-  font-weight: normal;
-}
-
-.owf-graph-title-temp {
-  color: #FA8072;
-}
-
-.owf-graph-title-rain {
-  color: #7CD5FF;
-}
-
-.owf-temp-minmax {
-  font-size: 11px;
-  color: #FA8072;
-}
-
 /* Remove white frame from container */
 .owf-graph-container {
   background-color: black !important;

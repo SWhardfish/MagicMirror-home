@@ -229,7 +229,7 @@ let config = {
                 }
       },
       {
-        module: "MMM-InfoCentral",
+        module: "MMM-Receptbok",
         position: "fullscreen_below",
         config: {
           // ============================================================================
@@ -250,8 +250,8 @@ let config = {
           // ============================================================================
 
           // Path to images directory relative to MagicMirror root
-          // Default: "modules/MMM-InfoCentral/images"
-          imageDir: "modules/MMM-InfoCentral/images",
+          // Default: "modules/MMM-Receptbok/images"
+          imageDir: "modules/MMM-Receptbok/images",
 
           // Animation speed for transitions in milliseconds
           // Default: 1000 (1 second)

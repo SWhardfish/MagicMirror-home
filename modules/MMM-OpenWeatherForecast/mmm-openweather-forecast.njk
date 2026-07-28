@@ -511,10 +511,6 @@
 
   {% if config.showTemperatureGraph %}
     {% if config.graphEngine == "chartjs" %}
-      <div class="owf-graph-header">
-        <span class="owf-graph-title"><span class="owf-graph-title-temp">TEMPERATURE</span> &amp; <span class="owf-graph-title-rain">RAIN</span></span>
-        <span id="owf-temp-minmax" class="owf-temp-minmax"></span>
-      </div>
       <div id="owf-graph-container" class="owf-graph-container" style="width: 100%; height: 115px; background-color: black !important; overflow: hidden; position: relative;">
         <canvas id="owf-temperature-chart" style="width: 100%; height: 100%;"></canvas>
       </div>

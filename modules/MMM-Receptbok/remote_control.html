@@ -135,12 +135,95 @@
             background: linear-gradient(135deg, #d4a574, #8b5e3c);
             color: white;
             border-color: #8b5e3c !important;
+            flex: 2;
         }
         .btn-edit {
             background: #f0ebe3;
             color: #6b4c2a;
+            flex: 1;
         }
         .btn-edit:hover { background: #e8dfd4; }
+        .btn-delete {
+            background: #fdecea;
+            color: #c0392b;
+            border-color: #f5c6cb !important;
+            flex: 1;
+        }
+        .btn-delete:hover { background: #f5c6cb; }
+
+        /* Timer buttons row */
+        .recipe-timer-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+        .btn-timer {
+            padding: 6px 12px;
+            background: #e8f4e8;
+            color: #2d6a4f;
+            border: 1px solid #95d5b2;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-timer:active { transform: scale(0.95); }
+        .btn-timer.running {
+            background: #2d6a4f;
+            color: white;
+            border-color: #2d6a4f;
+        }
+
+        /* Active timer cards float at top */
+        .active-timers-section {
+            margin-bottom: 12px;
+        }
+        .active-timer-card {
+            background: white;
+            border: 2px solid #95d5b2;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .active-timer-card.done {
+            border-color: #e08080;
+            background: #fff5f5;
+        }
+        .active-timer-info { flex: 1; }
+        .active-timer-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2d6a4f;
+        }
+        .active-timer-card.done .active-timer-label { color: #c0392b; }
+        .active-timer-recipe {
+            font-size: 10px;
+            color: #aaa;
+            margin-top: 1px;
+        }
+        .active-timer-time {
+            font-size: 24px;
+            font-weight: 300;
+            font-variant-numeric: tabular-nums;
+            color: #2d6a4f;
+            letter-spacing: 2px;
+        }
+        .active-timer-card.done .active-timer-time { color: #c0392b; font-weight: 700; font-size: 16px; }
+        .active-timer-cancel {
+            padding: 4px 10px;
+            background: #fdecea;
+            color: #c0392b;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
         .recipe-item-title {
             font-family: Georgia, serif;
             font-size: 16px;
@@ -350,6 +433,7 @@
 
     <!-- Browse panel -->
     <div id="panel-browse" class="panel active">
+        <div id="activeTimersSection" class="active-timers-section" style="display:none"></div>
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="Search recipes..." oninput="filterRecipes()">
         </div>
@@ -359,6 +443,7 @@
 
     <!-- Add recipe panel -->
     <div id="panel-add" class="panel">
+        <input type="hidden" id="formId">
         <div class="form-group">
             <label>Recipe Title</label>
             <input type="text" id="formTitle" placeholder="e.g. Kanelbullar (Cinnamon Buns)">
@@ -399,6 +484,12 @@
             <textarea id="formTips" placeholder="Any helpful tips or notes..."></textarea>
         </div>
 
+        <div class="form-group">
+            <label>Timers (optional)</label>
+            <div id="timersContainer"></div>
+            <button class="btn-add" onclick="addTimerField()">+ Add timer</button>
+        </div>
+
         <button class="btn-save" onclick="saveRecipe()">Save Recipe</button>
     </div>
 
@@ -416,8 +507,86 @@
         var allTags = {};
         var activeTag = null;
 
-        // Load recipes on start
+        // Timer state — Pi runs countdown, mobile just reflects state
+        var timerState = []; // [{label, secondsLeft, done}] from server
+        var timerPollInterval = null;
+
+        function fmtTime(secs) {
+            if (secs <= 0) return "00:00";
+            var m = Math.floor(secs / 60);
+            var s = secs % 60;
+            return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+        }
+
+        function toggleTimer(recipeId, label, minutes) {
+            var running = timerState.find(function (t) { return t.label === label && !t.done; });
+            if (running) {
+                fetch(mirrorUrl + "/receptbok/timer/cancel", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ label: label })
+                }).then(function () { pollTimerState(); }).catch(function () {});
+            } else {
+                fetch(mirrorUrl + "/receptbok/show/" + recipeId, { method: "POST" }).catch(function () {});
+                fetch(mirrorUrl + "/receptbok/timer/start", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ label: label, minutes: minutes })
+                }).then(function () { pollTimerState(); }).catch(function () {});
+            }
+        }
+
+        function pollTimerState() {
+            fetch(mirrorUrl + "/receptbok/timer/state")
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    timerState = data;
+                    renderActiveTimers();
+                    updateTimerButtons();
+                    if (data.length > 0 && !timerPollInterval) {
+                        timerPollInterval = setInterval(pollTimerState, 2000);
+                    } else if (data.length === 0 && timerPollInterval) {
+                        clearInterval(timerPollInterval);
+                        timerPollInterval = null;
+                    }
+                }).catch(function () {});
+        }
+
+        function renderActiveTimers() {
+            var section = document.getElementById("activeTimersSection");
+            var running = timerState.filter(function (t) { return !t.done; });
+            if (running.length === 0) { section.style.display = "none"; section.innerHTML = ""; return; }
+            section.style.display = "block";
+            var html = "";
+            running.forEach(function (t) {
+                html += '<div class="active-timer-card">';
+                html += '<div class="active-timer-info">';
+                html += '<div class="active-timer-label">🟢 ' + escapeHtml(t.label) + '</div>';
+                html += '</div>';
+                html += '<div class="active-timer-time">' + fmtTime(t.secondsLeft) + '</div>';
+                html += '</div>';
+            });
+            section.innerHTML = html;
+        }
+
+        function updateTimerButtons() {
+            document.querySelectorAll(".btn-timer").forEach(function (btn) {
+                var label = btn.getAttribute("data-label");
+                if (!label) return;
+                var t = timerState.find(function (x) { return x.label === label && !x.done; });
+                if (t) {
+                    btn.classList.add("running");
+                    btn.textContent = "🟢 " + label + " · " + fmtTime(t.secondsLeft);
+                } else {
+                    btn.classList.remove("running");
+                    btn.textContent = "⏱ " + label + " · " + btn.getAttribute("data-duration");
+                }
+            });
+        }
+
+        // Load recipes and timer state on start
         loadRecipes();
+        pollTimerState();
 
         function loadRecipes() {
             fetch(mirrorUrl + '/receptbok/recipes')
@@ -500,13 +669,32 @@
                     }
                     html += '</div>';
                 }
-                html += '<div class="recipe-item-actions">';
+                // Row 1: Show, Edit, Delete
+                html += '<div class="recipe-item-actions" style="display:flex;gap:6px;margin-top:8px;">';
                 html += '<button class="btn-show" onclick="showRecipe(\'' + r.id + '\')">Show on Mirror</button>';
                 html += '<button class="btn-edit" onclick="editRecipe(\'' + r.id + '\')">Edit</button>';
+                html += '<button class="btn-delete" onclick="deleteRecipe(\'' + r.id + '\', \'' + escapeHtml(r.title) + '\')">Delete</button>';
                 html += '</div>';
+                // Row 2: Timer buttons (only if recipe has timers — loaded lazily from full recipe)
+                html += '<div class="recipe-timer-row" id="timers-' + r.id + '"></div>';
                 html += '</div>';
             }
             container.innerHTML = html;
+            // Load timer buttons for each recipe that has timers
+            list.forEach(function (r) {
+                if (r.timers && r.timers.length > 0) {
+                    renderTimerButtons(r.id, r.title, r.timers);
+                } else {
+                    // Fetch full recipe to check for timers field
+                    fetch(mirrorUrl + '/receptbok/recipes/' + r.id)
+                        .then(function(res) { return res.json(); })
+                        .then(function(full) {
+                            if (full.timers && full.timers.length > 0) {
+                                renderTimerButtons(full.id, full.title, full.timers);
+                            }
+                        }).catch(function() {});
+                }
+            });
         }
 
         function showRecipe(id) {
@@ -525,6 +713,7 @@
                 .then(function(r) { return r.json(); })
                 .then(function(recipe) {
                     switchTab('add');
+                    document.getElementById('formId').value = recipe.id || '';
                     document.getElementById('formTitle').value = recipe.title || '';
                     document.getElementById('formPrepTime').value = recipe.prepTime || '';
                     document.getElementById('formTotalTime').value = recipe.totalTime || '';
@@ -553,10 +742,33 @@
                         lastRow.querySelector('textarea').value = stepText;
                     });
 
+                    // Load timers
+                    document.getElementById('timersContainer').innerHTML = '';
+                    (recipe.timers || []).forEach(function(timer) {
+                        addTimerField(timer.label, timer.minutes);
+                    });
+
                     showToast('Editing: ' + recipe.title);
                 })
                 .catch(function() {
                     showToast('Failed to load recipe');
+                });
+        }
+
+        function deleteRecipe(id, title) {
+            if (!confirm('Delete "' + title + '"? This cannot be undone.')) return;
+            fetch(mirrorUrl + '/receptbok/delete/' + id, { method: 'DELETE' })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        showToast('Deleted: ' + title);
+                        loadRecipes();
+                    } else {
+                        showToast('Error: ' + (data.error || 'Unknown'));
+                    }
+                })
+                .catch(function() {
+                    showToast('Connection error');
                 });
         }
 
@@ -618,6 +830,19 @@
             renumberSteps();
         }
 
+        function addTimerField(label, minutes) {
+            var container = document.getElementById('timersContainer');
+            var div = document.createElement('div');
+            div.className = 'timer-row';
+            div.style.cssText = 'display:flex;gap:8px;margin-bottom:8px;align-items:center;';
+            div.innerHTML =
+                '<input type="text" class="timer-label" placeholder="Label (e.g. Jäsning)" value="' + escapeHtml(label || '') + '" style="flex:1;padding:8px 12px;border:2px solid #e8dfd4;border-radius:6px;font-size:13px;">' +
+                '<input type="number" class="timer-minutes" placeholder="Min" value="' + (minutes || '') + '" style="width:70px;padding:8px 12px;border:2px solid #e8dfd4;border-radius:6px;font-size:13px;text-align:center;">' +
+                '<span style="font-size:12px;color:#8b5e3c;">min</span>' +
+                '<button class="btn-remove" onclick="this.parentElement.remove()">✕</button>';
+            container.appendChild(div);
+        }
+
         function renumberSteps() {
             var steps = document.querySelectorAll('#stepsContainer .step-row');
             for (var i = 0; i < steps.length; i++) {
@@ -629,7 +854,9 @@
             var title = document.getElementById('formTitle').value.trim();
             if (!title) { showToast('Please enter a title'); return; }
 
+            var existingId = document.getElementById('formId').value.trim();
             var recipe = {
+                id: existingId || undefined,
                 title: title,
                 prepTime: document.getElementById('formPrepTime').value.trim(),
                 totalTime: document.getElementById('formTotalTime').value.trim(),
@@ -655,6 +882,17 @@
                 if (text) recipe.steps.push(text);
             }
 
+            var timerRows = document.querySelectorAll('#timersContainer .timer-row');
+            var timers = [];
+            for (var k = 0; k < timerRows.length; k++) {
+                var tLabel = timerRows[k].querySelector('.timer-label').value.trim();
+                var tMin = parseInt(timerRows[k].querySelector('.timer-minutes').value, 10);
+                if (tLabel && tMin > 0) {
+                    timers.push({ label: tLabel, minutes: tMin });
+                }
+            }
+            if (timers.length > 0) recipe.timers = timers;
+
             fetch(mirrorUrl + '/receptbok/save', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -677,6 +915,7 @@
         }
 
         function clearForm() {
+            document.getElementById('formId').value = '';
             document.getElementById('formTitle').value = '';
             document.getElementById('formPrepTime').value = '';
             document.getElementById('formTotalTime').value = '';
@@ -685,6 +924,7 @@
             document.getElementById('formTips').value = '';
             document.getElementById('ingredientGroups').innerHTML = '';
             document.getElementById('stepsContainer').innerHTML = '';
+            document.getElementById('timersContainer').innerHTML = '';
         }
 
         function showToast(msg) {
@@ -698,6 +938,25 @@
             var div = document.createElement('div');
             div.textContent = str;
             return div.innerHTML;
+        }
+
+        function renderTimerButtons(recipeId, recipeTitle, timers) {
+            var row = document.getElementById("timers-" + recipeId);
+            if (!row) return;
+            row.innerHTML = "";
+            timers.forEach(function (timer) {
+                var duration = timer.minutes + "m";
+                var t = timerState.find(function (x) { return x.label === timer.label && !x.done; });
+                var btn = document.createElement("button");
+                btn.className = "btn-timer" + (t ? " running" : "");
+                btn.setAttribute("data-label", timer.label);
+                btn.setAttribute("data-duration", duration);
+                btn.textContent = t ? "🟢 " + timer.label + " · " + fmtTime(t.secondsLeft) : "⏱ " + timer.label + " · " + duration;
+                btn.addEventListener("click", function () {
+                    toggleTimer(recipeId, timer.label, timer.minutes);
+                });
+                row.appendChild(btn);
+            });
         }
 
         // Keyboard shortcuts

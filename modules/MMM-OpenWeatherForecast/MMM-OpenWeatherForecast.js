@@ -700,16 +700,14 @@ Module.register("MMM-OpenWeatherForecast", {
     const cutoffTime = Date.now() / 1000 - (72 * 60 * 60);
     const timestamps = [];
     const temperatures = [];
-    const rainValues = [];
 
     if (weatherData && Array.isArray(weatherData)) {
       weatherData.forEach(entry => {
         if (entry.data && Array.isArray(entry.data)) {
           entry.data.forEach(record => {
             if (record.dt >= cutoffTime) {
-              timestamps.push(record.dt * 1000);
+              timestamps.push(record.dt * 1000); // Convert to milliseconds
               temperatures.push(record.temp);
-              rainValues.push(record.rain || 0);
             }
           });
         }
@@ -727,29 +725,10 @@ Module.register("MMM-OpenWeatherForecast", {
     const startTime = endTime - (72 * 60 * 60 * 1000);
 
     // Prepare chart data
-    const chartData = timestamps.map((ts, i) => ({ x: ts, y: temperatures[i] }));
-    const rainData = timestamps.map((ts, i) => ({ x: ts, y: rainValues[i] }));
-
-    // Max/min temp for today only
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
-    const todayStartMs = todayStart.getTime();
-    let todayMax = null, todayMin = null;
-    for (let i = 0; i < timestamps.length; i++) {
-      if (timestamps[i] >= todayStartMs) {
-        if (todayMax === null || temperatures[i] > todayMax) todayMax = temperatures[i];
-        if (todayMin === null || temperatures[i] < todayMin) todayMin = temperatures[i];
-      }
-    }
-    const minMaxEl = document.getElementById("owf-temp-minmax");
-    if (minMaxEl && todayMax !== null) {
-      minMaxEl.textContent = "Max: " + Math.round(todayMax) + "  Min: " + Math.round(todayMin);
-    }
-
-    // Max rain for y2 scale — round up to nearest 2mm, minimum 4mm
-    const maxRain = rainValues.length > 0 ? Math.max(...rainValues) : 0;
-    const hasRain = maxRain > 0;
-    const rainYMax = Math.max(Math.ceil(maxRain / 2) * 2, 4);
+    const chartData = timestamps.map((ts, i) => ({
+      x: ts,
+      y: temperatures[i]
+    }));
 
     // CRITICAL: Properly destroy existing chart to prevent memory leaks
     if (this.temperatureChart) {
@@ -766,44 +745,33 @@ Module.register("MMM-OpenWeatherForecast", {
     // Clear the canvas context to ensure fresh render
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // Create Chart.js chart matching matplotlib styling
     this.temperatureChart = new Chart(ctx, {
       type: 'line',
       data: {
-        datasets: [
-          ...(hasRain ? [{
-            // Rain — drawn first (behind temp), only when rain > 0
-            data: rainData,
-            borderColor: 'rgba(100, 200, 255, 0.7)',
-            borderWidth: 0.8,
-            backgroundColor: 'rgba(100, 200, 255, 0.15)',
-            fill: true,
-            pointRadius: 0,
-            pointHoverRadius: 0,
-            tension: 0.4,
-            yAxisID: 'y2',
-            order: 2
-          }] : []),
-          {
-            // Temperature — drawn on top
-            data: chartData,
-            borderColor: '#FA8072',
-            borderWidth: 0.8,
-            backgroundColor: 'transparent',
-            pointRadius: 0,
-            pointHoverRadius: 0,
-            tension: 0.4,
-            yAxisID: 'y',
-            order: 1
-          }
-        ]
+        datasets: [{
+          data: chartData,
+          borderColor: '#FA8072', // salmon color
+          borderWidth: 0.8, // Thinner line
+          backgroundColor: 'transparent',
+          pointRadius: 0,
+          pointHoverRadius: 0,
+          tension: 0.4 // smooth curve
+        }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        animation: { duration: 500 },
+        animation: {
+          duration: 500
+        },
         plugins: {
-          legend: { display: false },
-          tooltip: { enabled: false }
+          legend: {
+            display: false
+          },
+          tooltip: {
+            enabled: false
+          }
         },
         scales: {
           x: {
@@ -812,94 +780,109 @@ Module.register("MMM-OpenWeatherForecast", {
             max: endTime,
             time: {
               unit: 'hour',
-              displayFormats: { hour: 'HH' }
+              displayFormats: {
+                hour: 'HH'
+              },
+              tooltipFormat: 'MMM DD, HH:mm'
             },
             ticks: {
               color: 'white',
-              font: { size: 11 },
-              maxRotation: 0,
-              autoSkip: false,
-              callback: function(value) {
+              font: {
+                size: 11
+              },
+              callback: function(value, index, values) {
                 const date = new Date(value);
                 const hour = date.getHours();
+                // Only show labels for 0, 6, 12, 18
                 if ([0, 6, 12, 18].includes(hour)) {
                   return String(hour).padStart(2, '0');
                 }
-                return null;
-              }
+                return null; // Don't show label for other hours
+              },
+              maxRotation: 0,
+              autoSkip: false,
+              // Generate ticks at specific hours only
+              major: {
+                enabled: true
+              },
+              source: 'data'
             },
             afterBuildTicks: function(axis) {
+              // Custom tick generation: only show 0, 6, 12, 18
               const ticks = [];
-              const startDate = new Date(startTime);
+              const start = new Date(startTime);
+              const end = new Date(endTime);
+
+              // Start from the first occurrence of 0, 6, 12, or 18
+              const startDate = new Date(start);
               startDate.setMinutes(0, 0, 0);
               let currentHour = startDate.getHours();
               const targetHours = [0, 6, 12, 18];
+
+              // Find next target hour
               let nextTargetHour = targetHours.find(h => h >= currentHour);
               if (nextTargetHour === undefined) {
                 nextTargetHour = 0;
                 startDate.setDate(startDate.getDate() + 1);
               }
               startDate.setHours(nextTargetHour);
+
+              // Generate ticks every 6 hours
               let current = startDate.getTime();
-              while (current <= endTime) {
+              while (current <= end.getTime()) {
                 ticks.push({ value: current });
-                current += 6 * 60 * 60 * 1000;
+                current += 6 * 60 * 60 * 1000; // Add 6 hours
               }
+
               axis.ticks = ticks;
             },
             grid: {
               color: function(context) {
-                if (!context.tick) return 'transparent';
                 const date = new Date(context.tick.value);
-                if (date.getHours() === 0 && date.getMinutes() === 0) {
+                const hour = date.getHours();
+                const minute = date.getMinutes();
+                // Dotted white line at midnight (day boundaries)
+                if (hour === 0 && minute === 0) {
                   return 'rgba(255, 255, 255, 1)';
                 }
+                // Grey dotted grid
                 return 'rgba(128, 128, 128, 0.4)';
               },
               lineWidth: 0.4,
               drawBorder: false
             },
-            border: { display: false }
+            border: {
+              display: false
+            }
           },
           y: {
-            position: 'left',
             ticks: {
               color: 'white',
-              font: { size: 11 },
-              callback: function(value) { return value.toFixed(1) + ' °C'; },
-              maxTicksLimit: 4
+              font: {
+                size: 11
+              },
+              callback: function(value) {
+                return value.toFixed(1) + ' °C';
+              },
+              maxTicksLimit: 4 // Reduce y-axis ticks to about half
             },
             grid: {
               color: 'rgba(128, 128, 128, 0.4)',
               lineWidth: 0.4,
               drawBorder: false
             },
-            border: { display: false }
-          },
-          y2: {
-            min: 0,
-            max: rainYMax,
-            display: hasRain,
-            position: 'right',
-            title: {
-              display: true,
-              text: 'mm',
-              color: 'rgba(100, 200, 255, 0.5)',
-              font: { size: 8 },
-              padding: 0
-            },
-            ticks: {
-              color: 'rgba(100, 200, 255, 0.6)',
-              font: { size: 9 },
-              count: 3,
-              callback: function(value) { return value.toFixed(0); }
-            },
-            grid: { display: false },
-            border: { display: false }
+            border: {
+              display: false
+            }
           }
         },
         layout: {
-          padding: { left: 5, right: 5, top: 5, bottom: 5 }
+          padding: {
+            left: 5,
+            right: 5,
+            top: 5,
+            bottom: 5
+          }
         }
       },
       plugins: [{

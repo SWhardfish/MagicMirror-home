@@ -1,0 +1,8 @@
+{
+  "name": "MMM-LCDScheduler",
+  "version": "1.0.0",
+  "description": "MagicMirror module for scheduling LCD on/off control",
+  "dependencies": {
+    "node-schedule": "^2.1.1"
+  }
+}

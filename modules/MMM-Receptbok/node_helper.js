@@ -7,6 +7,8 @@ module.exports = NodeHelper.create({
     this.watchers = [];
     this.recipes = [];
     this.stepsPerPage = 6;
+    this.activeTimers = [];
+    this.timerInterval = null;
     console.log("MMM-Receptbok helper started");
   },
 
@@ -45,7 +47,7 @@ module.exports = NodeHelper.create({
         self.loadRecipes();
       }
       var list = (self.recipes || []).map(function (r) {
-        return { id: r.id, title: r.title, tags: r.tags, prepTime: r.prepTime, servings: r.servings };
+        return { id: r.id, title: r.title, tags: r.tags, prepTime: r.prepTime, servings: r.servings, timers: r.timers || [] };
       });
       res.json(list);
     });
@@ -101,6 +103,54 @@ module.exports = NodeHelper.create({
         console.error("MMM-Receptbok: Error saving recipe: " + err);
         res.status(500).json({ error: "Failed to save recipe" });
       }
+    });
+
+    app.use("/receptbok/delete", require("express").json());
+    app.delete("/receptbok/delete/:id", function (req, res) {
+      var id = req.params.id;
+      var filePath = path.join(__dirname, "recipes", id + ".json");
+      if (!fs.existsSync(filePath)) {
+        res.status(404).json({ error: "Recipe not found" });
+        return;
+      }
+      try {
+        fs.unlinkSync(filePath);
+        self.loadRecipes();
+        res.json({ success: true, id: id });
+      } catch (err) {
+        console.error("MMM-Receptbok: Error deleting recipe: " + err);
+        res.status(500).json({ error: "Failed to delete recipe" });
+      }
+    });
+
+    // Timer management — Pi runs the countdown
+    app.use("/receptbok/timer/start", require("express").json());
+    app.post("/receptbok/timer/start", function (req, res) {
+      var label = req.body && req.body.label;
+      var minutes = req.body && req.body.minutes;
+      if (!label || !minutes) {
+        res.status(400).json({ error: "Need label and minutes" });
+        return;
+      }
+      self.startTimer(label, minutes);
+      res.json({ success: true, label: label, minutes: minutes });
+    });
+
+    app.use("/receptbok/timer/cancel", require("express").json());
+    app.post("/receptbok/timer/cancel", function (req, res) {
+      var label = req.query.label || (req.body && req.body.label);
+      if (!label) {
+        res.status(400).json({ error: "Need label" });
+        return;
+      }
+      self.cancelTimer(label);
+      res.json({ success: true, label: label });
+    });
+
+    app.get("/receptbok/timer/state", function (req, res) {
+      res.json(self.activeTimers.map(function (t) {
+        return { label: t.label, secondsLeft: t.secondsLeft, done: t.done };
+      }));
     });
 
     // Serve the remote control page
@@ -196,12 +246,22 @@ module.exports = NodeHelper.create({
       tips: null
     };
 
-    // Calculate how many steps fit on page 1 (fewer because ingredients take space)
-    var ingredientCount = 0;
+    // Screen: 768px wide x 1366px tall (portrait).
+    // Header band: title(44px) + meta(24px) + padding(56px) + border ≈ 125px.
+    // Body padding top+bottom: 64px.
+    // Available body height: 1366 - 125 - 64 = 1177px.
+    // Ingredients: section title+margin ~50px, group title ~22px, each row ~26px (2-col grid), section margin 20px.
+    // Steps: section title+margin ~50px, each step ~48px (accounts for multi-line text).
+    var bodyHeight = 1177;
+    var ingHeight = 0;
     (recipe.ingredients || []).forEach(function (g) {
-      ingredientCount += g.items.length;
+      var rows = Math.ceil(g.items.length / 2);
+      ingHeight += (g.group !== "Ingredients" ? 22 : 0) + rows * 26;
     });
-    var firstPageSteps = Math.max(2, stepsPerPage - Math.floor(ingredientCount / 4));
+    // Section title + margin for ingredients block
+    ingHeight += 70;
+    var remainingForSteps = bodyHeight - ingHeight;
+    var firstPageSteps = Math.max(2, Math.floor(remainingForSteps / 48));
 
     var stepIndex = 0;
     for (var i = 0; i < Math.min(firstPageSteps, steps.length); i++) {
@@ -218,7 +278,8 @@ module.exports = NodeHelper.create({
 
     pages.push(firstPage);
 
-    // Remaining steps go on subsequent pages
+    // Remaining steps go on subsequent pages (~22 steps fit without ingredients)
+    var stepsOnlyPerPage = Math.max(stepsPerPage, Math.floor((bodyHeight - 70) / 48));
     while (stepIndex < steps.length) {
       var page = {
         ingredients: null,
@@ -226,7 +287,7 @@ module.exports = NodeHelper.create({
         tips: null
       };
 
-      var pageStepCount = Math.min(stepsPerPage, steps.length - stepIndex);
+      var pageStepCount = Math.min(stepsOnlyPerPage, steps.length - stepIndex);
       for (var j = 0; j < pageStepCount; j++) {
         page.steps.push({ number: stepIndex + 1, text: steps[stepIndex] });
         stepIndex++;
@@ -241,6 +302,99 @@ module.exports = NodeHelper.create({
     }
 
     return pages;
+  },
+
+  startTimer: function (label, minutes) {
+    // Cancel existing timer with same label
+    this.cancelTimer(label);
+    this.activeTimers.push({
+      label: label,
+      secondsLeft: minutes * 60,
+      totalSeconds: minutes * 60,
+      done: false
+    });
+    this.ensureTimerTick();
+    this.broadcastTimers();
+  },
+
+  cancelTimer: function (label) {
+    this.activeTimers = this.activeTimers.filter(function (t) {
+      return t.label !== label;
+    });
+    this.broadcastTimers();
+    if (this.activeTimers.length === 0) {
+      this.stopTimerTick();
+    }
+  },
+
+  ensureTimerTick: function () {
+    if (this.timerInterval) return;
+    var self = this;
+    this.timerInterval = setInterval(function () {
+      self.tickTimers();
+    }, 1000);
+  },
+
+  stopTimerTick: function () {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+  },
+
+  tickTimers: function () {
+    var anyRunning = false;
+    for (var i = 0; i < this.activeTimers.length; i++) {
+      var t = this.activeTimers[i];
+      if (!t.done) {
+        t.secondsLeft--;
+        if (t.secondsLeft <= 0) {
+          t.secondsLeft = 0;
+          t.done = true;
+          this.sendSocketNotification("TIMER_DONE", { label: t.label });
+          this.triggerLedAlert(t.label);
+        } else {
+          anyRunning = true;
+        }
+      }
+    }
+    this.broadcastTimers();
+    if (!anyRunning) {
+      this.stopTimerTick();
+    }
+  },
+
+  broadcastTimers: function () {
+    var payload = this.activeTimers.map(function (t) {
+      return { label: t.label, secondsLeft: t.secondsLeft, done: t.done };
+    });
+    this.sendSocketNotification("TIMER_UPDATE", payload);
+  },
+
+  // Called whenever a timer reaches zero.
+  // Stub ready for WS2812 LEDs via rpi-ws281x — wire up hardware then uncomment.
+  triggerLedAlert: function (label) {
+    console.log("MMM-Receptbok: Timer done — " + label);
+
+    // --- WS2812 LED STUB ---
+    // Install: npm install rpi-ws281x
+    // Wiring:  DATA pin → GPIO 18 (PWM0), GND → GND, 5V → 5V rail
+    //
+    // var ws281x = require("rpi-ws281x");
+    // var NUM_LEDS = 8;
+    // ws281x.configure({ leds: NUM_LEDS, gpio: 18, brightness: 255 });
+    //
+    // Flash red 3 times then off
+    // var flashes = 0;
+    // var interval = setInterval(function () {
+    //   var on = (flashes % 2 === 0);
+    //   var pixels = new Uint32Array(NUM_LEDS);
+    //   for (var i = 0; i < NUM_LEDS; i++) pixels[i] = on ? 0x00FF0000 : 0x00000000;
+    //   ws281x.render(pixels);
+    //   flashes++;
+    //   if (flashes >= 6) { clearInterval(interval); ws281x.reset(); }
+    // }, 400);
+    // --- END WS2812 STUB ---
   },
 
   stop: function () {
