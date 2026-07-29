@@ -16,10 +16,19 @@ node_modules/
 *.stackdump
 mm_monitor.log
 
-# Debug screenshots (but NOT real module image assets)
+# Debug screenshots and sensitive image dumps — never commit these
 temp*.png
 verify-*.png
 modules/MMM-SolarProduction/.playwright-mcp/
+modules/MMM-SolarProduction/*.png
+modules/MMM-SolarProduction/*.jpg
+modules/MMM-SolarProduction/*.jpeg
+modules/MMM-Receptbok/images/
+modules/MMM-Receptbok/*.png
+modules/MMM-Receptbok/*.jpg
+modules/MMM-Receptbok/recipes/ToConvert/
+img.png
+img_1.png
 
 # IDE and tool state
 .claude/
