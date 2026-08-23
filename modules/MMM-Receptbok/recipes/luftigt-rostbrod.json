@@ -1,0 +1,63 @@
+{
+  "id": "luftigt-rostbrod",
+  "title": "Luftigt rostbröd",
+  "tags": [
+    "swedish",
+    "baking",
+    "bread"
+  ],
+  "servings": "1 loaf",
+  "prepTime": "20 min",
+  "totalTime": "2½ hours",
+  "ingredients": [
+    {
+      "group": "Deg",
+      "items": [
+        "15g färsk jäst",
+        "4 dl vatten, rumsvarmt",
+        "2 tsk strösocker",
+        "1½ msk rapsolja",
+        "1½ tsk salt",
+        "480–540g vetemjöl special"
+      ]
+    },
+    {
+      "group": "Pensling",
+      "items": [
+        "1 ägg",
+        "1 msk vatten",
+        "En nypa salt",
+        "Vallmofrön eller sesamfrön"
+      ]
+    }
+  ],
+  "steps": [
+    "Lös upp jästen i lite av vattnet. Tillsätt resten av vattnet, sockret, oljan och saltet.",
+    "Tillsätt mjölet lite i taget och knåda i 10 minuter tills degen är slät och smidig. Degen ska vara lite kletig — tillsätt inte för mycket mjöl.",
+    "Låt degen jäsa under duk i 1 timme tills den dubblat i storlek.",
+    "Forma till en längd och lägg i en smord brödform eller lägg på bakplåtspappersklädd plåt.",
+    "Låt jäsa under bakduk i 45 minuter. Skåra ytan med en vass kniv.",
+    "Vispa ihop ägg, vatten och salt. Pensla brödet och strö över frön.",
+    "Grädda i 250°C med en skål vatten i ugnen i 15 minuter. Sänk till 180°C och grädda ytterligare 30 minuter, tills brödet låter ihåligt när man slår på undersidan.",
+    "Låt svalna helt på galler innan brödet skärs upp."
+  ],
+  "tips": "Knåda länge för bästa luftighet. Vattnet i ugnen skapar ånga som ger en knaprig skorpa. Brödet är extra gott att rosta.",
+  "timers": [
+    {
+      "label": "Jäsning 1",
+      "minutes": 60
+    },
+    {
+      "label": "Jäsning 2",
+      "minutes": 45
+    },
+    {
+      "label": "Grädda hög värme",
+      "minutes": 15
+    },
+    {
+      "label": "Grädda lägre värme",
+      "minutes": 30
+    }
+  ]
+}

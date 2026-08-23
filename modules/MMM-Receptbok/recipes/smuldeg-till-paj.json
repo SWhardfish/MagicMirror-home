@@ -1,0 +1,39 @@
+{
+  "title": "Smuldeg till paj",
+  "prepTime": "15 min",
+  "totalTime": "45 min",
+  "servings": "4–6 servings",
+  "tags": [
+    "swedish",
+    "baking",
+    "desserts",
+    "pastry"
+  ],
+  "ingredients": [
+    {
+      "group": "Smuldeg (4–6 port)",
+      "items": [
+        "3 dl vetemjöl",
+        "¾ dl socker",
+        "1–2 tsk vanillinsocker",
+        "½ krm salt",
+        "100g smör eller margarin, kallt"
+      ]
+    }
+  ],
+  "steps": [
+    "Blanda mjöl, socker, vanillinsocker och salt i en bunke.",
+    "Skär det kalla smöret i småbitar och lägg ner det i mjölblandningen.",
+    "Finfördela allt med hjälp av en gaffel eller bordskniv tills det bildas en smulig massa. Arbeta snabbt så smöret inte smälter.",
+    "Strö smuldegen jämnt över frukt eller bär i en ugnsfast form.",
+    "Grädda i 225°C i 20–30 minuter tills toppen är gyllenbrun."
+  ],
+  "tips": "Kan varieras med grovhackade sötmandlar, hasselnötter eller valnötter. Extra god med riven mandelmassa inblandad i smuldegen. Välj bär eller frukt efter tillgång och smak.",
+  "id": "smuldeg-till-paj",
+  "timers": [
+    {
+      "label": "Grädda",
+      "minutes": 25
+    }
+  ]
+}

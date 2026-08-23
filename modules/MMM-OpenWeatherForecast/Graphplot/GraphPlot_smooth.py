@@ -1,0 +1,157 @@
+import json
+import matplotlib
+
+matplotlib.use('Agg')  # Use non-interactive backend for better performance
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.ticker import StrMethodFormatter
+from datetime import datetime, timedelta
+import os
+import shutil
+import numpy as np
+from scipy.interpolate import make_interp_spline
+
+# Paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_FILE = os.path.join(BASE_DIR, '..', 'weather_data.json')
+OUTPUT_FILE = os.path.join(BASE_DIR, 'temperature_plot.png')
+TEMP_OUTPUT_FILE = os.path.join(BASE_DIR, 'temperature_plot.tmp.png')
+
+
+def plot_temperature():
+    if not os.path.exists(DATA_FILE):
+        print("Data file does not exist!")
+        return
+
+    # Calculate cutoff (72 hours ago)
+    cutoff_time = datetime.utcnow() - timedelta(hours=72)
+    cutoff_timestamp = cutoff_time.timestamp()
+
+    # Load and filter data efficiently
+    timestamps, temperatures = [], []
+
+    try:
+        with open(DATA_FILE, 'r') as file:
+            data = json.load(file)
+            # Filter during iteration to minimize memory usage
+            for entry in data:
+                for record in entry['data']:
+                    if record['dt'] >= cutoff_timestamp:
+                        timestamps.append(datetime.utcfromtimestamp(record['dt']))
+                        temperatures.append(record['temp'])
+    except (json.JSONDecodeError, KeyError, IOError) as e:
+        print(f"Error reading data: {e}")
+        return
+
+    if not timestamps:
+        print("No data available for the last 72 hours!")
+        return
+
+    # Use exactly 72 hours: from oldest to newest data point
+    end_time = timestamps[-1]
+    start_time = end_time - timedelta(hours=72)
+
+    # Create plot with optimized settings
+    fig, ax = plt.subplots(figsize=(3.6, 0.9), dpi=100)
+    fig.patch.set_facecolor('black')
+    ax.set_facecolor('black')
+
+    # Convert timestamps to numerical format for interpolation
+    timestamps_num = mdates.date2num(timestamps)
+
+    # Create smooth curve using cubic spline interpolation to round sharp 90-degree corners
+    # Only smooth if we have enough data points
+    if len(timestamps) >= 4:
+        # Create more points for smoother curve (3x density for smooth corners)
+        timestamps_smooth = np.linspace(timestamps_num.min(), timestamps_num.max(), len(timestamps) * 3)
+
+        # Cubic spline interpolation - smooths sharp corners beautifully
+        spl = make_interp_spline(timestamps_num, temperatures, k=3)
+        temperatures_smooth = spl(timestamps_smooth)
+
+        # Convert back to datetime for plotting
+        timestamps_smooth_dt = mdates.num2date(timestamps_smooth)
+
+        # Plot smoothed temperature line with rounded corners
+        ax.plot(timestamps_smooth_dt, temperatures_smooth, color='salmon', linewidth=0.5, antialiased=True)
+    else:
+        # Fallback to regular plot if not enough data points
+        ax.plot(timestamps, temperatures, color='salmon', linewidth=0.5, antialiased=True)
+
+    # Set x-axis limits to use full space
+    ax.set_xlim([start_time, end_time])
+
+    # X-axis: Show hours at 0, 6, 12, 18 (cleaner than 00:00 format)
+    ax.xaxis.set_major_locator(mdates.HourLocator(byhour=[0, 6, 12, 18]))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H'))
+    ax.tick_params(axis='x', labelsize=8, colors='white')
+
+    # Calculate day boundaries for separators and labels
+    first_date = start_time.date()
+    last_date = end_time.date()
+
+    # Generate day boundaries (midnight times)
+    current_day = first_date + timedelta(days=1)
+    day_boundaries = []
+    while current_day <= last_date:
+        day_boundaries.append(datetime.combine(current_day, datetime.min.time()))
+        current_day += timedelta(days=1)
+
+    # Draw day separators (vertical lines at midnight)
+    for boundary in day_boundaries:
+        ax.axvline(x=boundary, color='white', linestyle='dotted', linewidth=0.5)
+
+    # Add day labels (e.g., "Tue", "Wed", "Thu")
+    y_mid = (ax.get_ylim()[0] + ax.get_ylim()[1]) / 2
+
+    # Label each complete day
+    for i in range(len(day_boundaries) + 1):
+        if i == 0:
+            day_start = start_time
+            day_end = day_boundaries[0] if day_boundaries else end_time
+        elif i == len(day_boundaries):
+            day_start = day_boundaries[-1]
+            day_end = end_time
+        else:
+            day_start = day_boundaries[i - 1]
+            day_end = day_boundaries[i]
+
+        # Calculate midpoint for label placement
+        midpoint = day_start + (day_end - day_start) / 2
+        day_name = day_start.strftime('%a')
+
+        ax.text(mdates.date2num(midpoint), y_mid, day_name,
+                color='white', alpha=0.25, fontsize=14,
+                ha='center', va='center', zorder=1)
+
+    # Y-axis formatting
+    ax.yaxis.set_major_formatter(StrMethodFormatter(u"{x:.1f} °C"))
+    ax.tick_params(axis='y', labelsize=8, colors='white')
+
+    # Grid
+    ax.grid(which='major', axis='both', color='grey', linestyle='dotted', linewidth=0.4)
+
+    # Save with optimized settings - use atomic write to prevent partial reads
+    plt.savefig(TEMP_OUTPUT_FILE, facecolor='black', dpi=100,
+                bbox_inches='tight', pad_inches=0.05)
+    plt.close(fig)
+
+    # Atomic move - ensures file is complete before it's visible
+    if os.path.exists(TEMP_OUTPUT_FILE):
+        # Ensure file is fully synced to disk before moving (critical for Raspberry Pi)
+        with open(TEMP_OUTPUT_FILE, 'rb') as f:
+            os.fsync(f.fileno())
+
+        shutil.move(TEMP_OUTPUT_FILE, OUTPUT_FILE)
+
+        # Sync the final file as well to ensure it's readable
+        with open(OUTPUT_FILE, 'rb') as f:
+            os.fsync(f.fileno())
+
+        print(f"Graph saved and synced to disk: {OUTPUT_FILE}")
+    else:
+        print("Error: Temporary file was not created")
+
+
+if __name__ == "__main__":
+    plot_temperature()

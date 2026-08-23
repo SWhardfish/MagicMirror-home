@@ -1,0 +1,128 @@
+/* Magic Mirror Custom CSS Sample
+ *
+ * Change color and fonts here.
+ *
+ * Beware that properties cannot be unitless, so for example write '--gap-body: 0px;' instead of just '--gap-body: 0;'
+ *
+ * MIT Licensed.
+ */
+
+/* Uncomment and adjust accordingly if you want to import another font from the google-fonts-api: */
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;700&display=swap'); */
+
+body {
+    margin: 10px;
+    position: absolute;
+    height: calc(100% - 20px);
+    width: calc(100% - 20px);
+}
+
+/* Let top_left region stack modules */
+.region.top.left .container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* default = left */
+}
+
+/* Override only for the calendar */
+.calendar-centered {
+  align-self: center;   /* center horizontally */
+  margin-top: 20px;     /* small gap below MMM-SL */
+}
+
+.module.clock {
+  margin-top: 20px;   /* adjust until aligned */
+}
+
+.calendar {
+    margin-top: 420px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.calendar .symbol {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start; /* 👈 align left */
+  padding-left: 2 !important;  /* remove any left padding */
+  margin-left: 0 !important;   /* remove any margin */
+  padding-right: 0px;         /* keep spacing between icon & text */
+  font-size: var(--font-size-small);
+}
+
+/* Make event title flush left, right next to the symbol */
+.calendar .title {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  text-align: left;
+  font-size: var(--font-size-medium);
+}
+
+/* Same for location */
+.calendar .location {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  text-align: left;
+  font-size: var(--font-size-small);
+}
+
+/* Adjust the time column if needed */
+.calendar .time {
+  padding-left: 10px !important; /* smaller gap so text is closer */
+  text-align: right;
+  vertical-align: top;
+}
+
+
+.MMM-SL {
+    width: 360px;
+    margin-top: 0 !important;
+    margin-bottom: 60px;
+}
+
+.MMM-network-signal {
+    margin: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}
+
+/* Add some space below the lunch module */
+.MMM-SchoolLunch {
+  margin-bottom: 30px; /* adjust value as needed */
+}
+
+
+/* Södra Latin Lunch module */
+.MMM-SchoolLunch .schoolLunchTitle {
+  display: block; !important;
+  font-size: 16px !important;
+  color: #fff;     /* white */
+  margin: 0 0 2px 0;
+}
+
+.MMM-SchoolLunch .schoolLunchItem {
+  display: block; !important; 
+  font-size: 14px !important;
+  margin: 0 0 2px 0;
+  color: #ccc;     /* light gray */
+}
+
+.MMM-SchoolLunch .schoolLunchVeg {
+  display: block; !important;
+  font-size: 14px !important;
+  margin: 0 0 2px 0;
+  color: #4CAF50; !important;   /* green */
+}
+
+.MMM-SchoolLunch .schoolLunchTitle,
+.MMM-SchoolLunch .schoolLunchItem,
+.MMM-SchoolLunch .schoolLunchVeg {
+  line-height: 1.1em;   /* smaller value = tighter spacing */
+}
+
+/* Remove the gap just above the MMM-SL module */
+.region .MMM-SL {
+  margin-top: 0 !important;
+}
+

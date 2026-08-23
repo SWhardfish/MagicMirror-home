@@ -1,0 +1,269 @@
+/* === Global layout === */
+body {
+  margin: 10px;
+  position: absolute;
+  height: calc(100% - 20px);
+  width: calc(100% - 20px);
+}
+
+/* === Clock tweaks === */
+.module.clock {
+  margin-top: 20px;   /* adjust until aligned */
+}
+
+/* === MMM-SL module === */
+.MMM-SL {
+  width: 360px;
+  margin-top: 0 !important;
+  margin-bottom: 20px;   /* gap before calendar */
+}
+
+/* Remove double margins */
+.region .MMM-SL {
+  margin-top: 0 !important;
+}
+
+/* === School Lunch module === */
+.MMM-SchoolLunch {
+  margin-bottom: 30px; /* spacing below lunch module */
+}
+
+.MMM-SchoolLunch .schoolLunchTitle {
+  display: block !important;
+  font-size: 16px !important;
+  color: #fff;
+  margin: 0 0 2px 0;
+}
+
+.MMM-SchoolLunch .schoolLunchItem {
+  display: block !important;
+  font-size: 14px !important;
+  margin: 0 0 2px 0;
+  color: #ccc;
+}
+
+.MMM-SchoolLunch .schoolLunchVeg {
+  display: block !important;
+  font-size: 14px !important;
+  margin: 0 0 2px 0;
+  color: #4CAF50 !important;
+}
+
+.MMM-SchoolLunch .schoolLunchTitle,
+.MMM-SchoolLunch .schoolLunchItem,
+.MMM-SchoolLunch .schoolLunchVeg {
+  line-height: 1.1em;
+}
+
+/* === Solar Production module — tighten gap to weather above === */
+.MMM-SolarProduction {
+  margin-top: -25px !important;
+}
+
+/* === Compact weather alert — single-line with seamless scrolling description === */
+.MMM-OpenWeatherForecast .weather-alert {
+  margin-bottom: 4px !important;
+  padding: 4px 8px 4px 36px !important;
+  background-size: 20px 18px !important;
+  background-position: 8px 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+.MMM-OpenWeatherForecast .weather-alert .weather-alert-title {
+  font-size: 13px !important;
+  padding-left: 0 !important;
+  margin-bottom: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+  margin-right: 12px !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+}
+/* Outer clip container for the ticker */
+.weather-alert-ticker {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
+/* Inner element contains text doubled up — animates 0 → -50% for seamless loop */
+.MMM-OpenWeatherForecast .weather-alert .weather-alert-description {
+  display: inline-block !important;
+  white-space: nowrap !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+  color: #ccc !important;
+  -webkit-line-clamp: unset !important;
+  overflow: visible !important;
+  vertical-align: middle !important;
+  animation: alert-ticker 90s linear infinite !important;
+}
+.MMM-OpenWeatherForecast .weather-alert .weather-alert-source {
+  display: none !important;
+}
+
+@keyframes alert-ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* === MMM-SL header — match FORECAST style === */
+.MMM-SL .module-header {
+  text-transform: uppercase;
+  font-size: 14px;
+  border-bottom: 1px solid #222 !important;
+}
+
+/* === Network Signal module === */
+.MMM-network-signal {
+  margin: 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+}
+
+/* === Region behavior: stack modules vertically === */
+.region.top.left .container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* =========================================================
+   CALENDAR — full width, dynamic position tracks right column
+   ========================================================= */
+/* Override the middle.center region so it starts at top:0 with no
+   vertical centering transform — JS drives the calendar's top instead */
+.region.middle.center {
+  top: 0 !important;
+  transform: none !important;
+}
+
+/* JS (MMM-SolarProduction) sets top dynamically via ResizeObserver.
+   left/transform centers it horizontally within the now-static region. */
+.calendar-fixed {
+  position: absolute !important;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100% !important;
+}
+
+.calendar-centered {
+  width: 100% !important;
+}
+
+/* Header text centered */
+.calendar-centered .module-header {
+  text-align: center !important;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Use full table width */
+.calendar-centered .module-content table {
+  width: 100% !important;
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+/* Reset row + cell defaults */
+.calendar-centered .module-content tr,
+.calendar-centered .module-content td {
+  vertical-align: middle !important;
+  padding: 0;
+}
+
+/* SYMBOL column: left aligned with small inset */
+.calendar-centered .module-content td.symbol {
+  width: 40px;
+  padding-left: 5px !important;   /* ✅ must use px */
+  padding-right: 6px;
+  text-align: left !important;
+}
+
+/* Ensure the title cell is left-aligned */
+.calendar-centered .module-content td.title {
+  text-align: left !important;
+  vertical-align: middle !important;
+}
+
+/* Ensure the location inside stays inline and respects left alignment */
+.calendar-centered .module-content td.title .location {
+  display: inline-block !important;
+  text-align: left !important;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+
+/* TIME column: fixed width, right aligned, clipped if too long */
+.calendar-centered .module-content td.time {
+  width: 120px;
+  text-align: left !important;
+  padding-right: 6px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* ===========================
+   Strong overrides for left-aligning location
+   =========================== */
+
+/* Use both classes for extra specificity (you said you use both) */
+.calendar-centered.calendar-fixed .module-content td.title,
+.calendar-centered.calendar-fixed .module-content td.title * {
+  text-align: left !important;    /* force text alignment on the cell and descendants */
+}
+
+/* Also explicitly target common inner/title wrappers */
+.calendar-centered.calendar-fixed .module-content td.title .title,
+.calendar-centered.calendar-fixed .module-content td.title span.title,
+.calendar-centered.calendar-fixed .module-content td.title div.title {
+  text-align: left !important;
+}
+
+/* Keep the location inline, ellipses and overflow behavior */
+.calendar-centered.calendar-fixed .module-content .location {
+  display: inline-block !important;
+  max-width: 100% !important;     /* stay inside the available width */
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-align: left !important;    /* final safety */
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  float: none !important;         /* cancel any float that might center things */
+}
+
+/* If a flex parent centers children, force it to start from the left */
+.calendar-centered.calendar-fixed .module-content td.title {
+  /* Do NOT change display here (keeps table layout stable), but override flex props if present */
+  justify-content: flex-start !important;
+  align-items: center !important;
+}
+
+/* Extra: ensure TIME and SYMBOL keep their layout */
+.calendar-centered.calendar-fixed .module-content td.time,
+.calendar-centered.calendar-fixed .module-content td.symbol {
+  text-align: left !important;
+}
+
+/* Keep header centered */
+.region.middle.center .calendar-centered.calendar-fixed .module-header {
+  text-align: center !important;
+}
+
+/* Force calendar table content left */
+.region.middle.center .calendar-centered.calendar-fixed .module-content {
+  text-align: left !important;
+}
+

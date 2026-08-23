@@ -1,0 +1,7 @@
+{
+  "name": "MMM-Images",
+  "version": "1.0.0",
+  "dependencies": {
+    "onoff": "^6.0.0"
+  }
+}

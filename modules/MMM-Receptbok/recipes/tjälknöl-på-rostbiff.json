@@ -1,0 +1,43 @@
+{
+  "title": "Tjälknöl på Rostbiff",
+  "prepTime": "10 min",
+  "totalTime": "10-11 timmar",
+  "servings": "4-6 personer",
+  "tags": [
+    "swedish",
+    "kött"
+  ],
+  "ingredients": [
+    {
+      "group": "Köttet",
+      "items": [
+        "1–1,2 kg fryst rostbiff (går även bra med fransyska eller innanlår)"
+      ]
+    },
+    {
+      "group": "Saltlagen",
+      "items": [
+        "1 liter vatten",
+        "1 dl salt",
+        "1 msk strösocker",
+        "1 st gul lök, skivad",
+        "10 st krossade svartpeppar korn"
+      ]
+    }
+  ],
+  "steps": [
+    "Gör så härUgnsbaka (Tid: 10-12 timmar): Sätt ugnen på 75°C. Lägg den frysta rostbiffen i en ugnssäker form och ställ in i nedre delen av ugnen.",
+    "Låt steken stå i ugnen tills innertemperaturen är 65°C för rosa kött, 70°C för mer genomstekt (använd en köttermometer).",
+    "Koka lagen (Tid: 10 min): Koka under tiden upp vatten, salt, socker, lök och pepparkorn i en kastrull. Låt lagen koka i några minuter och ställ den sedan åt sidan för att svalna lite.",
+    "Låt dra (Tid: 4–6 timmar): Lägg den varma, färdigbakade steken i den kalla eller ljumma saltlagen. Låt köttet dra i lagen i 4 till 5 timmar, gärna i kylskåp.",
+    "Servera: Ta upp köttet, torka av det lätt med hushållspapper och skär upp i tunna skivor."
+  ],
+  "tips": "Servera gärna det kalla köttet med en krämig potatisgratäng, rårörda lingon eller vinbärsgelé och en svampstuvning",
+  "timers": [
+    {
+      "label": "Ugnsbakning (11 Tim)",
+      "minutes": 660
+    }
+  ],
+  "id": "tjälknöl-på-rostbiff"
+}

@@ -1,0 +1,60 @@
+config.js
+
+{
+  module: 'MMM-Images',
+  position: 'fullscreen_above',   // fills the screen
+  config: {
+    imagePath: 'modules/MMM-Images/images',
+    autoReturnHours: 0,           // 0 = disabled, or e.g. 2 for 2 hours
+    gpioNext: 17,                 // Button A
+    gpioMain: 27                  // Button B
+  }
+},
+
+
+
+
+
+Also run:   Then run npm install inside the module folder.
+
+
+
+Quick setup checklist
+
+cd ~/MagicMirror/modules && git clone (or copy the folder)
+
+npm install inside MMM-RecipePage
+
+Wire your two buttons to GPIO17 and GPIO27 with internal pull-ups.
+
+Add the module entry to config.js and restart MagicMirror.
+
+
+
+
+
+
+
+Here’s a plan that integrates two physical GPIO buttons with a MagicMirror² module so you can flip between your regular MagicMirror dashboard and a “recipe slideshow” page. The idea is:
+
+Button A = “Next recipe / enter recipe mode”
+
+Button B = “Return to main screen”
+
+Optional auto-return timer to go back after x hours.
+
+Below is a full working outline you can copy into a module folder and adapt.
+
+1. Hardware setup
+
+Raspberry Pi running MagicMirror²
+
+Two push-buttons wired between a GPIO pin and ground
+
+e.g. GPIO17 for Button A
+
+GPIO27 for Button B
+
+Enable internal pull-ups so you don’t need extra resistors:
+
+Connect the other side of each button to GND.

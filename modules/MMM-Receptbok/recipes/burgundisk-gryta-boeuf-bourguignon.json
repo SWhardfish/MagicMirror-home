@@ -1,0 +1,63 @@
+{
+  "id": "burgundisk-gryta-boeuf-bourguignon",
+  "title": "Burgundisk gryta (Boeuf Bourguignon)",
+  "prepTime": "40 min",
+  "totalTime": "2 hours",
+  "servings": "4 servings",
+  "tags": [
+    "french",
+    "dinner",
+    "beef",
+    "winter"
+  ],
+  "ingredients": [
+    {
+      "group": "Kött och bas",
+      "items": [
+        "600–800g benfritt nötkött (högrev, märgpipa, innanlår eller rostbiff), i 2×2 cm tärningar",
+        "1½–2 msk smör eller margarin",
+        "1½–2 msk vetemjöl",
+        "1 tsk salt",
+        "1 krm vitpeppar",
+        "1 tsk timjan",
+        "1 lagerblad",
+        "1–2 klyftor vitlök, krossade",
+        "1 msk tomatpuré",
+        "2 dl rött vin",
+        "3 dl buljong (tärning)"
+      ]
+    },
+    {
+      "group": "Grönsaker och svamp",
+      "items": [
+        "1 msk kinesisk soja",
+        "8–10 pärllökar eller steklökar",
+        "200g färska champinjoner (eller konserverade)",
+        "100g fläsk eller rimmat sidfläsk, i strimlor",
+        "1–2 msk hackad persilja"
+      ]
+    }
+  ],
+  "steps": [
+    "Putsa och skär köttet i tärningar, 2×2 cm.",
+    "Värm smör i en stekpanna på hög värme. Bryn köttet i omgångar tills det är väl brynt. Lägg det i en stekgryta.",
+    "Torka ur stekpannan. Bryn nästa omgång kött och upprepa tills allt kött har fin färg.",
+    "Strö mjölet över köttet i grytan. Rör om väl. Salta, krydda och rör i tomatpurén.",
+    "Späd med vin och buljong under omrörning. Tillsätt soja och låt grytan sjuda på svag värme under lock i 1½ timme, eller tills köttet börjar bli mört.",
+    "Skala löken. Ansa, putsa och skär champinjonerna. Skär fläsket i tunna strimlor.",
+    "Bryn lök, champinjoner och fläsk var för sig i en stekpanna tills de har fin färg.",
+    "Lägg lök, champinjoner och fläsk i köttgrytan och låt dem koka med de sista 15–20 minuterna.",
+    "Strö över hackad persilja och servera med kokt potatis, ris eller pasta."
+  ],
+  "tips": "Grytan blir ännu godare om den tillagas dagen innan och värms upp. Välj ett vin du gärna dricker — det behöver inte vara dyrt men ska vara gott.",
+  "timers": [
+    {
+      "label": "1. Sjud grytan",
+      "minutes": 75
+    },
+    {
+      "label": "2. Lägg i det sista",
+      "minutes": 20
+    }
+  ]
+}

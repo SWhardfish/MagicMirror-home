@@ -1,0 +1,34 @@
+{
+  "id": "almond-biscuits-with-dates",
+  "title": "Almond biscuits with Dates",
+  "prepTime": "15 mins",
+  "totalTime": "30 mins",
+  "servings": "10 biscuits",
+  "tags": [
+    "baking",
+    "buscuits"
+  ],
+  "ingredients": [
+    {
+      "group": "Dough",
+      "items": [
+        "200g Almond",
+        "100g Dates",
+        "25ml Boiling water",
+        "pinch of salt"
+      ]
+    }
+  ],
+  "steps": [
+    "Put everything in the mixer",
+    "Divide the dough and roll balls in your hands and flatten",
+    "Put on an oven tray and put it in the oven on 220°C for 5-10 minutes until golden brown"
+  ],
+  "tips": null,
+  "timers": [
+    {
+      "label": "Bake",
+      "minutes": 8
+    }
+  ]
+}

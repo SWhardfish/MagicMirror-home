@@ -1,0 +1,47 @@
+{
+  "id": "grandma-s-braised-fish",
+  "title": "Grandma's Braised Fish",
+  "prepTime": "20",
+  "totalTime": "30",
+  "servings": "2-4",
+  "tags": [
+    "fish",
+    "asian"
+  ],
+  "ingredients": [
+    {
+      "group": "Ingredients",
+      "items": [
+        "Coriander",
+        "1 red onion",
+        "4 garlicks",
+        "2 tablespoons freshly chopped ginger"
+      ]
+    },
+    {
+      "group": "Sauce",
+      "items": [
+        "1 tbl spoon Oyster Sauce",
+        "1 tbl spoon Light Soy Sauce",
+        "1 tbl spoon Fish Sauce",
+        "1 tbl spoon Sesame Oil",
+        "1/2 tbl spoon sugar",
+        "1/2-1 dl Water"
+      ]
+    }
+  ],
+  "steps": [
+    "Fry the coriander, red onion, garlic and ginger for 2 minutes",
+    "Add the white fish on top",
+    "Pour the sauce over the fish",
+    "Simmer with lid for 10 minuter",
+    "Garnish with coriander and chilli then serve with rice"
+  ],
+  "tips": null,
+  "timers": [
+    {
+      "label": "Simmer fish",
+      "minutes": 10
+    }
+  ]
+}

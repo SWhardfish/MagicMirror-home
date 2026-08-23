@@ -1,0 +1,66 @@
+{
+  "id": "kanelbullar",
+  "title": "Kanelbullar",
+  "prepTime": "45 min",
+  "totalTime": "2 timmar",
+  "servings": "ca 25 st",
+  "tags": [
+    "swedish",
+    "baking",
+    "fika"
+  ],
+  "ingredients": [
+    {
+      "group": "Deg",
+      "items": [
+        "25g jäst för söta degar",
+        "75g smör eller margarin",
+        "2½ dl mjölk",
+        "½ dl strösocker",
+        "1 krm salt",
+        "1 tsk malen kardemumma",
+        "ca 7 dl vetemjöl"
+      ]
+    },
+    {
+      "group": "Fyllning",
+      "items": [
+        "50g smör eller margarin, rumstempererat",
+        "½ dl strösocker",
+        "1 msk malen kanel"
+      ]
+    },
+    {
+      "group": "Pensling",
+      "items": [
+        "1 ägg",
+        "Pärlsocker"
+      ]
+    }
+  ],
+  "steps": [
+    "Smält smöret och tillsätt mjölken. Värm till fingervarmt, 37°C.",
+    "Smula ned jästen i en degbunke. Rör ut med lite av degvätskan och tillsätt sedan resten. Tillsätt salt, socker och kardemumma och rör om.",
+    "Arbeta in vetemjölet lite i taget med degkrokar eller hushållsmaskin tills degen är mjuk och smidig. Låt jäsa övertäckt i 30 minuter.",
+    "Kavla ut degen till en rektangulär platta, ca 20×50 cm.",
+    "Bred ut smöret jämnt över degen. Blanda socker och kanel och strö över. Rulla ihop tätt från långsidan.",
+    "Skär rullen i ca 1½ cm tjocka skivor och lägg dem med snittytan uppåt i bullformar. Låt jäsa ca 30 minuter.",
+    "Vispa upp ägget och pensla försiktigt på bullarna (inte trycka hårt). Strö pärlsocker.",
+    "Grädda i 225°C i 8–10 minuter tills bullarna är gyllenbruna. Låt svalna på galler."
+  ],
+  "tips": "Använd jäst för söta degar — den ger bättre jäsning med socker i degen. Pensla lätt så bullarna behåller sin form.",
+  "timers": [
+    {
+      "label": "Första jäsning",
+      "minutes": 30
+    },
+    {
+      "label": "Andra jäsning",
+      "minutes": 30
+    },
+    {
+      "label": "Grädda",
+      "minutes": 9
+    }
+  ]
+}

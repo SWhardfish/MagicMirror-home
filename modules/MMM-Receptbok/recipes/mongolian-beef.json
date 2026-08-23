@@ -1,0 +1,49 @@
+{
+  "title": "Mongolian Beef",
+  "prepTime": "15 min",
+  "totalTime": "30 min",
+  "servings": "4 servings",
+  "tags": [
+    "chinese",
+    "dinner",
+    "beef",
+    "asian"
+  ],
+  "ingredients": [
+    {
+      "group": "Beef",
+      "items": [
+        "1 pound flank steak, thinly sliced against the grain",
+        "1 tsp salt",
+        "2 tbsp Shaoxing wine",
+        "2 tsp oil",
+        "⅓ cup corn starch or potato starch",
+        "1 white onion, sliced",
+        "1 bunch green onions, cut into 5 cm pieces"
+      ]
+    },
+    {
+      "group": "Sauce",
+      "items": [
+        "1 tbsp brown sugar",
+        "1 tsp black pepper",
+        "2 tbsp soy sauce",
+        "2 tbsp rice wine vinegar",
+        "4 cloves garlic, minced",
+        "2 tbsp oyster sauce"
+      ]
+    }
+  ],
+  "steps": [
+    "Thinly slice the flank steak against the grain. Toss with salt and Shaoxing wine, then coat evenly with corn starch.",
+    "Mix all sauce ingredients together in a small bowl and set aside.",
+    "Heat oil in a wok or large pan over high heat until smoking. Fry the beef in batches for 2–3 minutes until crispy and golden. Remove and set aside.",
+    "In the same pan, stir-fry the sliced white onion for 2 minutes until softened.",
+    "Add the garlic and cook for 30 seconds until fragrant.",
+    "Pour in the sauce and bring to a simmer, stirring for 1 minute until slightly thickened.",
+    "Return the beef to the pan and toss to coat. Add the green onions and stir-fry for 1 minute.",
+    "Serve immediately over steamed rice."
+  ],
+  "tips": "Slice the beef as thin as possible — partially freezing it for 20 minutes makes this easier. Fry in small batches to keep the heat high and get a crispy crust rather than steaming.\nThs recipe also works well with chicken",
+  "id": "mongolian-beef"
+}

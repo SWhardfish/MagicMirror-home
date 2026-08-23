@@ -1,0 +1,139 @@
+/* === Global layout === */
+body {
+  margin: 10px;
+  position: absolute;
+  height: calc(100% - 20px);
+  width: calc(100% - 20px);
+}
+
+/* === Clock tweaks === */
+.module.clock {
+  margin-top: 20px;   /* adjust until aligned */
+}
+
+/* === MMM-SL module === */
+.MMM-SL {
+  width: 360px;
+  margin-top: 0 !important;
+  margin-bottom: 20px;   /* gap before calendar */
+}
+
+/* Remove double margins */
+.region .MMM-SL {
+  margin-top: 0 !important;
+}
+
+/* === School Lunch module === */
+.MMM-SchoolLunch {
+  margin-bottom: 30px; /* spacing below lunch module */
+}
+
+.MMM-SchoolLunch .schoolLunchTitle {
+  display: block !important;
+  font-size: 16px !important;
+  color: #fff;
+  margin: 0 0 2px 0;
+}
+
+.MMM-SchoolLunch .schoolLunchItem {
+  display: block !important;
+  font-size: 14px !important;
+  margin: 0 0 2px 0;
+  color: #ccc;
+}
+
+.MMM-SchoolLunch .schoolLunchVeg {
+  display: block !important;
+  font-size: 14px !important;
+  margin: 0 0 2px 0;
+  color: #4CAF50 !important;
+}
+
+.MMM-SchoolLunch .schoolLunchTitle,
+.MMM-SchoolLunch .schoolLunchItem,
+.MMM-SchoolLunch .schoolLunchVeg {
+  line-height: 1.1em;
+}
+
+/* === Network Signal module === */
+.MMM-network-signal {
+  margin: 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+}
+
+/* === Region behavior: stack modules vertically === */
+.region.top.left .container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* =========================================================
+   CALENDAR — full width, follows MMM-SL, correct alignment
+   ========================================================= */
+.calendar-centered {
+  width: 100% !important;
+  margin-top: 20px;                  /* gap below MMM-SL */
+}
+
+/* Header text centered */
+.calendar-centered .module-header {
+  text-align: center !important;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Use full table width */
+.calendar-centered .module-content table {
+  width: 100% !important;
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+/* Reset row + cell defaults */
+.calendar-centered .module-content tr,
+.calendar-centered .module-content td {
+  vertical-align: middle !important;
+  padding: 0;
+}
+
+/* SYMBOL column: left aligned with small inset */
+.calendar-centered .module-content td.symbol {
+  width: 40px;
+  padding-left: 5px !important;   /* ✅ must use px */
+  padding-right: 6px;
+  text-align: left !important;
+}
+
+/* TITLE column: left aligned, one line, cut off if too long */
+.calendar-centered .module-content td.title {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-align: left !important;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* LOCATION (inside title cell): same behavior */
+.calendar-centered .module-content .location {
+  display: inline-block !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-align: left !important;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+/* TIME column: fixed width, right aligned, clipped if too long */
+.calendar-centered .module-content td.time {
+  width: 120px;
+  text-align: left !important;
+  padding-right: 6px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}

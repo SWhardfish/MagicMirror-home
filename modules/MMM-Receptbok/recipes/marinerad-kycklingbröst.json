@@ -1,0 +1,45 @@
+{
+  "id": "marinerad-kycklingbröst",
+  "title": "Fiambre Marinerade kycklingbröst",
+  "prepTime": "10 min",
+  "totalTime": "1 hour",
+  "servings": "2 servings",
+  "tags": [
+    "spanish",
+    "dinner",
+    "chicken"
+  ],
+  "ingredients": [
+    {
+      "group": "Ingredients",
+      "items": [
+        "2 kycklingbröst",
+        "Juice av 1 citron",
+        "1 skvätt olivolja",
+        "1 msk oregano",
+        "1 tsk söt paprikapulver",
+        "½ tsk vitlökspulver",
+        "½ msk lökpulver",
+        "Salt och peppar"
+      ]
+    }
+  ],
+  "steps": [
+    "Blanda citronjuice, olivolja, oregano, paprikapulver, vitlökspulver, lökpulver, salt och peppar i en skål.",
+    "Lägg kycklingbrösten i marinaden och se till att de täcks väl. Marinera i minst 30 minuter.",
+    "Värm ugnen till 180°C. Lägg kycklingen i ett ugnsfast fat.",
+    "Täck med folie och grädda i 40–45 minuter beroende på tjockleken.",
+    "Ta bort folien de sista 5 minuterna för att få lite färg. Låt svalna, skär i skivor och servera."
+  ],
+  "tips": "Marinera gärna över natten för ännu mer smak. Passar utmärkt i sallad, wraps eller som tillbehör.",
+  "timers": [
+    {
+      "label": "Marinera",
+      "minutes": 30
+    },
+    {
+      "label": "Grädda",
+      "minutes": 40
+    }
+  ]
+}

@@ -35,3 +35,9 @@ img_1.png
 .superpowers/
 .idea/
 .worktrees/
+.playwright-mcp/
+
+# Backup and old-snapshot files
+*.BACK*
+modules/MMM-OpenWeatherForecast/Archive/*.js.*
+modules/MMM-SL/assets/schedule.json.OLD

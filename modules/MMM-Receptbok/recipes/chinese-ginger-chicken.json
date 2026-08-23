@@ -1,0 +1,70 @@
+{
+  "id": "chinese-ginger-chicken",
+  "title": "Chinese Ginger Chicken",
+  "tags": [
+    "chinese",
+    "dinner",
+    "chicken",
+    "stir-fry"
+  ],
+  "servings": "2-3 servings",
+  "prepTime": "15 min",
+  "totalTime": "55 min",
+  "ingredients": [
+    {
+      "group": "Marinade",
+      "items": [
+        "2 chicken breasts, chopped into bite-size pieces",
+        "1 tbsp fresh ginger, finely chopped",
+        "2 cloves garlic, finely chopped",
+        "1 tbsp olive oil",
+        "1 tbsp honey",
+        "1/2 tbsp corn starch",
+        "1 tbsp soy sauce",
+        "Dried red pepper flakes, to taste",
+        "Salt and black pepper to taste"
+      ]
+    },
+    {
+      "group": "Stir-fry",
+      "items": [
+        "2 large yellow onions, sliced",
+        "1 red bell pepper, sliced",
+        "1 green bell pepper, sliced",
+        "3 tbsp olive oil"
+      ]
+    },
+    {
+      "group": "Sauce",
+      "items": [
+        "1 tbsp fresh ginger, finely chopped",
+        "3 cloves garlic, finely chopped",
+        "80ml chicken broth",
+        "1 tbsp soy sauce",
+        "1/2 tbsp corn starch"
+      ]
+    }
+  ],
+  "steps": [
+    "Combine the chicken pieces with ginger, garlic, olive oil, honey, corn starch, soy sauce, red pepper flakes, salt, and black pepper. Mix well and marinate for 30 minutes.",
+    "While the chicken marinates, slice the onions and bell peppers into strips.",
+    "Heat 2 tbsp olive oil in a frying pan over high heat. Fry the chicken until cooked through and lightly browned, about 5-6 minutes. Remove and set aside.",
+    "Add 1 tbsp olive oil to the same pan. Add ginger and garlic, stir-fry for 1 minute until fragrant.",
+    "Add the onions and fry for 1 minute.",
+    "Add the red and green bell pepper strips and fry for 2 minutes.",
+    "Mix the chicken broth, soy sauce, and corn starch in a small bowl until smooth.",
+    "Return the chicken to the pan, pour the broth mixture over everything, and cook for 5 minutes until the sauce thickens.",
+    "Serve over steamed rice."
+  ],
+  "tips": "Do not skip the marinade � 30 minutes minimum, 1 hour is even better. Corn starch in both the marinade and sauce keeps the chicken tender and the sauce glossy.",
+  "timers": [
+    {
+      "label": "Marinera",
+      "minutes": 30
+    },
+    {
+      "label": "Koka",
+      "minutes": 5
+    }
+  ]
+}

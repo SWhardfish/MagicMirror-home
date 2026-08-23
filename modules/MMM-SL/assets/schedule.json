@@ -1,0 +1,289 @@
+{
+  "schedules": [
+    {
+      "stop_name": "Barnängsbryggan",
+      "transport_type": "SHIP",
+      "lineid": "Sjöstadsbåtarna",
+      "destination": "Luma",
+      "valid_until": "2026-06-19",
+      "days": {
+        "Monday-Friday": [
+          {"hour": 6, "minutes": [0, 20, 40]},
+          {"hour": 7, "minutes": [0, 10, 20, 30, 40, 50]},
+          {"hour": 8, "minutes": [0, 10, 20, 30, 40, 50]},
+          {"hour": 9, "minutes": [0, 20, 40]},
+          {"hour": 10, "minutes": [0, 20, 40]},
+          {"hour": 11, "minutes": [0, 20, 40]},
+          {"hour": 12, "minutes": [0, 20, 40]},
+          {"hour": 13, "minutes": [0, 20, 40]},
+          {"hour": 14, "minutes": [0, 20, 40]},
+          {"hour": 15, "minutes": [0, 20, 40, 50]},
+          {"hour": 16, "minutes": [0, 10, 20, 30, 40, 50]},
+          {"hour": 17, "minutes": [0, 10, 20, 30, 40, 50]},
+          {"hour": 18, "minutes": [0, 20, 40]},
+          {"hour": 19, "minutes": [0, 20, 40]},
+          {"hour": 20, "minutes": [0, 20, 40]},
+          {"hour": 21, "minutes": [0, 20, 40]},
+          {"hour": 22, "minutes": [0, 20, 40]},
+          {"hour": 23, "minutes": [0, 20, 40]},
+          {"hour": 0, "minutes": [0]}
+        ],
+        "Saturday-Sunday": [
+          {"hour": 8, "minutes": [0, 20, 40]},
+          {"hour": 9, "minutes": [0, 20, 40]},
+          {"hour": 10, "minutes": [0, 20, 40]},
+          {"hour": 11, "minutes": [0, 20, 40]},
+          {"hour": 12, "minutes": [0, 20, 40]},
+          {"hour": 13, "minutes": [0, 20, 40]},
+          {"hour": 14, "minutes": [0, 20, 40]},
+          {"hour": 15, "minutes": [0, 20, 40]},
+          {"hour": 16, "minutes": [0, 20, 40]},
+          {"hour": 17, "minutes": [0, 20, 40]},
+          {"hour": 18, "minutes": [0, 20, 40]},
+          {"hour": 19, "minutes": [0, 20, 40]},
+          {"hour": 20, "minutes": [0, 20, 40]},
+          {"hour": 21, "minutes": [0, 20, 40]},
+          {"hour": 22, "minutes": [0, 20, 40]},
+          {"hour": 23, "minutes": [0, 20, 40]},
+          {"hour": 0, "minutes": [0]}
+        ]
+      }
+    },
+    {
+      "stop_name": "Barnängsbryggan",
+      "transport_type": "SHIP",
+      "lineid": "Sjöstadsbåtarna",
+      "destination": "Luma",
+      "valid_from": "2026-06-20",
+      "valid_until": "2026-08-16",
+      "days": {
+        "Monday-Friday": [
+          {"hour": 6, "minutes": [0, 20, 40]},
+          {"hour": 7, "minutes": [0, 20, 40]},
+          {"hour": 8, "minutes": [0, 20, 40]},
+          {"hour": 9, "minutes": [0, 20, 40]},
+          {"hour": 10, "minutes": [0, 20, 40]},
+          {"hour": 11, "minutes": [0, 20, 40]},
+          {"hour": 12, "minutes": [0, 20, 40]},
+          {"hour": 13, "minutes": [0, 20, 40]},
+          {"hour": 14, "minutes": [0, 20, 40]},
+          {"hour": 15, "minutes": [0, 20, 40]},
+          {"hour": 16, "minutes": [0, 20, 40]},
+          {"hour": 17, "minutes": [0, 20, 40]},
+          {"hour": 18, "minutes": [0, 20, 40]},
+          {"hour": 19, "minutes": [0, 20, 40]},
+          {"hour": 20, "minutes": [0, 20, 40]},
+          {"hour": 21, "minutes": [0, 20, 40]},
+          {"hour": 22, "minutes": [0, 20, 40]},
+          {"hour": 23, "minutes": [0, 20, 40]},
+          {"hour": 0, "minutes": [0]}
+        ],
+        "Saturday-Sunday": [
+          {"hour": 8, "minutes": [0, 20, 40]},
+          {"hour": 9, "minutes": [0, 20, 40]},
+          {"hour": 10, "minutes": [0, 20, 40]},
+          {"hour": 11, "minutes": [0, 20, 40]},
+          {"hour": 12, "minutes": [0, 20, 40]},
+          {"hour": 13, "minutes": [0, 20, 40]},
+          {"hour": 14, "minutes": [0, 20, 40]},
+          {"hour": 15, "minutes": [0, 20, 40]},
+          {"hour": 16, "minutes": [0, 20, 40]},
+          {"hour": 17, "minutes": [0, 20, 40]},
+          {"hour": 18, "minutes": [0, 20, 40]},
+          {"hour": 19, "minutes": [0, 20, 40]},
+          {"hour": 20, "minutes": [0, 20, 40]},
+          {"hour": 21, "minutes": [0, 20, 40]},
+          {"hour": 22, "minutes": [0, 20, 40]},
+          {"hour": 23, "minutes": [0, 20, 40]},
+          {"hour": 0, "minutes": [0]}
+        ]
+      }
+    },
+    {
+      "stop_name": "Barnängsbryggan",
+      "transport_type": "SHIP",
+      "lineid": "Sjöstadsbåtarna",
+      "destination": "Luma",
+      "valid_from": "2026-08-17",
+      "valid_until": "2027-06-25",
+      "days": {
+        "Monday-Friday": [
+          {"hour": 6, "minutes": [0, 20, 40]},
+          {"hour": 7, "minutes": [0, 10, 20, 30, 40, 50]},
+          {"hour": 8, "minutes": [0, 10, 20, 30, 40, 50]},
+          {"hour": 9, "minutes": [0, 20, 40]},
+          {"hour": 10, "minutes": [0, 20, 40]},
+          {"hour": 11, "minutes": [0, 20, 40]},
+          {"hour": 12, "minutes": [0, 20, 40]},
+          {"hour": 13, "minutes": [0, 20, 40]},
+          {"hour": 14, "minutes": [0, 20, 40]},
+          {"hour": 15, "minutes": [0, 20, 40, 50]},
+          {"hour": 16, "minutes": [0, 10, 20, 30, 40, 50]},
+          {"hour": 17, "minutes": [0, 10, 20, 30, 40, 50]},
+          {"hour": 18, "minutes": [0, 20, 40]},
+          {"hour": 19, "minutes": [0, 20, 40]},
+          {"hour": 20, "minutes": [0, 20, 40]},
+          {"hour": 21, "minutes": [0, 20, 40]},
+          {"hour": 22, "minutes": [0, 20, 40]},
+          {"hour": 23, "minutes": [0, 20, 40]},
+          {"hour": 0, "minutes": [0]}
+        ],
+        "Saturday-Sunday": [
+          {"hour": 8, "minutes": [0, 20, 40]},
+          {"hour": 9, "minutes": [0, 20, 40]},
+          {"hour": 10, "minutes": [0, 20, 40]},
+          {"hour": 11, "minutes": [0, 20, 40]},
+          {"hour": 12, "minutes": [0, 20, 40]},
+          {"hour": 13, "minutes": [0, 20, 40]},
+          {"hour": 14, "minutes": [0, 20, 40]},
+          {"hour": 15, "minutes": [0, 20, 40]},
+          {"hour": 16, "minutes": [0, 20, 40]},
+          {"hour": 17, "minutes": [0, 20, 40]},
+          {"hour": 18, "minutes": [0, 20, 40]},
+          {"hour": 19, "minutes": [0, 20, 40]},
+          {"hour": 20, "minutes": [0, 20, 40]},
+          {"hour": 21, "minutes": [0, 20, 40]},
+          {"hour": 22, "minutes": [0, 20, 40]},
+          {"hour": 23, "minutes": [0, 20, 40]},
+          {"hour": 0, "minutes": [0]}
+        ]
+      }
+    },
+    {
+      "stop_name": "Barnängsbryggan",
+      "transport_type": "SHIP",
+      "lineid": "Emelie",
+      "destination": "Nybroviken",
+      "valid_from": "2026-04-20",
+      "valid_until": "2026-06-18",
+      "days": {
+        "Monday-Friday": [
+          {"hour": 7, "minutes": [14]},
+          {"hour": 8, "minutes": [14]},
+          {"hour": 9, "minutes": [14]},
+          {"hour": 10, "minutes": [14]},
+          {"hour": 11, "minutes": [14]},
+          {"hour": 13, "minutes": [44]},
+          {"hour": 14, "minutes": [44]},
+          {"hour": 15, "minutes": [44]},
+          {"hour": 16, "minutes": [44]},
+          {"hour": 17, "minutes": [44]}
+        ],
+        "Saturday": [
+          {"hour": 9, "minutes": [14, 44]},
+          {"hour": 10, "minutes": [14, 44]},
+          {"hour": 11, "minutes": [14, 44]},
+          {"hour": 12, "minutes": [44]},
+          {"hour": 13, "minutes": [44]},
+          {"hour": 14, "minutes": [44]},
+          {"hour": 15, "minutes": [14, 44]},
+          {"hour": 16, "minutes": [14, 44]},
+          {"hour": 17, "minutes": [14]},
+          {"hour": 18, "minutes": [14]},
+          {"hour": 19, "minutes": [14]}
+        ],
+        "Sunday": [
+          {"hour": 9, "minutes": [14, 44]},
+          {"hour": 10, "minutes": [14, 44]},
+          {"hour": 11, "minutes": [14, 44]},
+          {"hour": 12, "minutes": [44]},
+          {"hour": 13, "minutes": [44]},
+          {"hour": 14, "minutes": [44]},
+          {"hour": 15, "minutes": [14, 44]},
+          {"hour": 16, "minutes": [14, 44]},
+          {"hour": 17, "minutes": [14]},
+          {"hour": 18, "minutes": [14]}
+        ]
+      }
+    },
+    {
+      "stop_name": "Barnängsbryggan",
+      "transport_type": "SHIP",
+      "lineid": "Emelie",
+      "destination": "Nybroviken",
+      "valid_from": "2026-06-19",
+      "valid_until": "2026-08-16",
+      "days": {
+        "Monday-Friday": [
+          {"hour": 7, "minutes": [14]},
+          {"hour": 8, "minutes": [14]},
+          {"hour": 9, "minutes": [14]},
+          {"hour": 10, "minutes": [14]},
+          {"hour": 11, "minutes": [14]},
+          {"hour": 13, "minutes": [44]},
+          {"hour": 14, "minutes": [44]},
+          {"hour": 15, "minutes": [44]},
+          {"hour": 16, "minutes": [44]},
+          {"hour": 17, "minutes": [44]}
+        ],
+        "Saturday": [
+          {"hour": 9, "minutes": [14]},
+          {"hour": 10, "minutes": [14]},
+          {"hour": 11, "minutes": [14]},
+          {"hour": 12, "minutes": [14]},
+          {"hour": 14, "minutes": [14]},
+          {"hour": 15, "minutes": [14]},
+          {"hour": 16, "minutes": [14]},
+          {"hour": 17, "minutes": [14]},
+          {"hour": 18, "minutes": [14]}
+        ],
+        "Sunday": [
+          {"hour": 9, "minutes": [14]},
+          {"hour": 10, "minutes": [14]},
+          {"hour": 11, "minutes": [14]},
+          {"hour": 12, "minutes": [14]},
+          {"hour": 14, "minutes": [14]},
+          {"hour": 15, "minutes": [14]},
+          {"hour": 16, "minutes": [14]},
+          {"hour": 17, "minutes": [14]}
+        ]
+      }
+    },
+    {
+      "stop_name": "Barnängsbryggan",
+      "transport_type": "SHIP",
+      "lineid": "Emelie",
+      "destination": "Nybroviken",
+      "valid_from": "2026-08-17",
+      "valid_until": "2026-09-20",
+      "days": {
+        "Monday-Friday": [
+          {"hour": 7, "minutes": [14]},
+          {"hour": 8, "minutes": [14]},
+          {"hour": 9, "minutes": [14]},
+          {"hour": 10, "minutes": [14]},
+          {"hour": 11, "minutes": [14]},
+          {"hour": 13, "minutes": [44]},
+          {"hour": 14, "minutes": [44]},
+          {"hour": 15, "minutes": [44]},
+          {"hour": 16, "minutes": [44]},
+          {"hour": 17, "minutes": [44]}
+        ],
+        "Saturday": [
+          {"hour": 9, "minutes": [14, 44]},
+          {"hour": 10, "minutes": [14, 44]},
+          {"hour": 11, "minutes": [14, 44]},
+          {"hour": 12, "minutes": [44]},
+          {"hour": 13, "minutes": [44]},
+          {"hour": 14, "minutes": [44]},
+          {"hour": 15, "minutes": [14, 44]},
+          {"hour": 16, "minutes": [14, 44]},
+          {"hour": 17, "minutes": [14]},
+          {"hour": 18, "minutes": [14]},
+          {"hour": 19, "minutes": [14]}
+        ],
+        "Sunday": [
+          {"hour": 9, "minutes": [14, 44]},
+          {"hour": 10, "minutes": [14, 44]},
+          {"hour": 11, "minutes": [14, 44]},
+          {"hour": 12, "minutes": [44]},
+          {"hour": 13, "minutes": [44]},
+          {"hour": 14, "minutes": [44]},
+          {"hour": 15, "minutes": [14, 44]},
+          {"hour": 16, "minutes": [14, 44]},
+          {"hour": 17, "minutes": [14]}
+        ]
+      }
+    }
+  ]
+}

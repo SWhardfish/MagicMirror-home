@@ -1,0 +1,40 @@
+{
+  "title": "Tacokrydda med sting",
+  "prepTime": "5 min",
+  "totalTime": "5 min",
+  "servings": "1 batch (räcker till 500g köttfärs)",
+  "tags": [
+    "swedish",
+    "mexican",
+    "spices",
+    "condiments"
+  ],
+  "ingredients": [
+    {
+      "group": "Kryddblandning",
+      "items": [
+        "1 msk mortlad spiskummin",
+        "½ msk starkt paprikapulver",
+        "½ msk chiliflakes",
+        "2 msk oregano"
+      ]
+    },
+    {
+      "group": "Till tacos",
+      "items": [
+        "500g nötfärs",
+        "1 dryg msk av kryddblandningen",
+        "2 klyftor vitlök, rivna",
+        "1 tsk salt"
+      ]
+    }
+  ],
+  "steps": [
+    "Blanda spiskummin, paprikapulver, chiliflakes och oregano i en burk. Skaka om ordentligt.",
+    "Fräs nötfärsen i en torr stekpanna på medelhög värme tills den är genomstekt och fått fin färg.",
+    "Tillsätt en dryg matsked av kryddblandningen, den rivna vitlöken och saltet. Rör om och fräs ytterligare 2 minuter.",
+    "Servera i taco eller tortillabröd med valfria tillbehör."
+  ],
+  "tips": "Kryddblandningen håller länge i en lufttät burk. Öka chiliflakesen för mer hetta. Passar även till tortillasoppa eller gratänger.",
+  "id": "tacokrydda-med-sting"
+}

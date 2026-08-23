@@ -1,0 +1,45 @@
+{
+  "title": "Gari (Homemade Pickled Sushi Ginger)",
+  "prepTime": "25 min",
+  "totalTime": "1 day 30 min",
+  "servings": "2 servings (approximate)",
+  "tags": [
+    "japanese",
+    "condiments",
+    "sushi"
+  ],
+  "ingredients": [
+    {
+      "group": "Ginger",
+      "items": [
+        "300g young ginger",
+        "½ tsp salt"
+      ]
+    },
+    {
+      "group": "Amazu (Sweet Vinegar)",
+      "items": [
+        "1,2 dl kombu dashi",
+        "1,2 dl risvinäger",
+        "2 msk socker",
+        "½ tsk salt"
+      ]
+    }
+  ],
+  "steps": [
+    "Peel the young ginger and slice as thinly as possible, ideally with a mandoline.",
+    "Toss the ginger slices with ½ tsp salt and let stand for 5–10 minutes to draw out moisture.",
+    "Blanch the salted ginger in boiling water for about 1 minute. Drain and squeeze out excess water.",
+    "Combine all amazu ingredients in a small saucepan and heat gently until the sugar and salt dissolve. Do not boil.",
+    "Place the ginger in a clean sterilised jar and pour the warm amazu over it.",
+    "Let cool to room temperature, then seal and refrigerate for at least 1 day before serving. It will turn pale pink naturally."
+  ],
+  "tips": "Young ginger turns pink naturally in the vinegar — no food colouring needed. If using mature ginger, blanch for 2–3 minutes. Keeps in the fridge for up to 1 month.",
+  "id": "gari-homemade-pickled-sushi-ginger",
+  "timers": [
+    {
+      "label": "Blanch ginger",
+      "minutes": 1
+    }
+  ]
+}

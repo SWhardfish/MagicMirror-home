@@ -1,0 +1,56 @@
+{
+  "id": "mias-basta-brod",
+  "title": "Mias bästa bröd",
+  "tags": [
+    "swedish",
+    "baking",
+    "bread",
+    "oats"
+  ],
+  "servings": "2 loaves",
+  "prepTime": "30 min",
+  "totalTime": "2½ hours",
+  "ingredients": [
+    {
+      "group": "Deg",
+      "items": [
+        "50g jäst",
+        "5½ dl ljummet vatten",
+        "½ dl olivolja + 1 msk extra",
+        "1–2 tsk salt",
+        "2 dl havregryn",
+        "Cirka 12–13 dl vetemjöl special",
+        "Flingsalt"
+      ]
+    }
+  ],
+  "steps": [
+    "Smula jästen i en degbunke. Rör ut med lite av det ljumna vattnet tills jästen är löst.",
+    "Tillsätt resten av vattnet, ½ dl olivolja och vanligt salt. Rör om.",
+    "Häll i havregryn och rör om. Tillsätt mjölet lite i taget och knåda i 10 minuter tills degen är fast. Tillsätt eventuellt lite mer mjöl.",
+    "Häll på 1 msk olivolja och vänd om så degen täcks. Låt jäsa under bakduk i 1 timme.",
+    "Dela degen i två delar. Forma till längder, vrid om och lägg på bakplåtspappersklädd plåt.",
+    "Låt jäsa under bakduk i 45 minuter. Skåra och strö över lite flingsalt.",
+    "Grädda i 250°C med en skål vatten i botten av ugnen i 15 minuter. Sänk till 180°C och kör i 30 minuter, eller tills bröden låter ihåliga när du slår på undersidan.",
+    "Låt svalna på galler."
+  ],
+  "tips": "Välldigt gott att rosta. Havregryn ger ett saftigt inkråm och härlig textur. Bröden går bra att frysa.",
+  "timers": [
+    {
+      "label": "Jäsning 1",
+      "minutes": 60
+    },
+    {
+      "label": "Jäsning 2",
+      "minutes": 45
+    },
+    {
+      "label": "Grädda hög värme",
+      "minutes": 15
+    },
+    {
+      "label": "Grädda lägre värme",
+      "minutes": 30
+    }
+  ]
+}
