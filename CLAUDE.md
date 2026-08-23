@@ -55,7 +55,6 @@ MagicMirror server: `npm start` — port 8080, accessible on the local network.
 | `MMM-OpenWeatherForecast` | Weather forecast with Chart.js temperature graph (72h) |
 | `MMM-SolarProduction` | Building solar panel production graph + stats (72h, green line) |
 | `MMM-Images` | Rotating image display |
-| `MMM-SchoolLunch` | School lunch calendar integration |
 
 ## Design language — mirror display
 
