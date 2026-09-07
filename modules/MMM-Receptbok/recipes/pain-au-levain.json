@@ -1,0 +1,87 @@
+{
+  "id": "pain-au-levain",
+  "title": "Pain au Levain (Sourdough Bread)",
+  "tags": [
+    "bread",
+    "sourdough",
+    "baking",
+    "french"
+  ],
+  "servings": "2 large loaves",
+  "prepTime": "12 h levain + 6 h dough",
+  "totalTime": "~20 hours",
+  "ingredients": [
+    {
+      "group": "Overall Formula (Baker's %)",
+      "items": [
+        "862g bread flour — 95%",
+        "45g medium rye flour — 5%",
+        "590g water — 65%",
+        "17g salt — 1.8%",
+        "Total: 1514g | Pre-fermented flour: 15.5%"
+      ]
+    },
+    {
+      "group": "Levain Build (make 12 h ahead)",
+      "items": [
+        "130g bread flour — 93.5%",
+        "9g medium rye flour — 6.5%",
+        "85g water — 60%",
+        "28g mature stiff culture — 20%",
+        "Total levain: 252g"
+      ]
+    },
+    {
+      "group": "Final Dough",
+      "items": [
+        "731g bread flour",
+        "37g medium rye flour",
+        "505g water",
+        "17g salt",
+        "224g levain (all except 28g kept as seed)",
+        "Total: 1514g"
+      ]
+    }
+  ],
+  "steps": [
+    "LEVAIN BUILD (12 hours before mixing): Combine 130g bread flour, 9g rye flour, 85g water, and 28g mature stiff culture. Mix well, cover, and let ripen at 21°C for ~12 hours. In hot weather, or if ripening longer than 12 hours, add a pinch of salt (1.8% of levain flour) to slow activity.",
+    "AUTOLYSE: Combine all final dough flour (731g bread flour + 37g rye flour) with 505g water in a mixing bowl. Mix on low speed just until a shaggy mass forms. Cover and rest 20–60 minutes.",
+    "MIXING: Sprinkle 17g salt over the dough surface. Cut the ripened levain into fist-sized pieces and place on top. Mix on second speed for 1½–2 minutes until smooth and supple. Target dough temperature: 24°C.",
+    "BULK FERMENTATION: Cover and ferment at room temperature for 2½ hours.",
+    "FOLDING: Fold the dough twice during bulk fermentation — first fold at 50 minutes, second fold at 100 minutes.",
+    "DIVIDING & SHAPING: Divide dough into two equal pieces (~680g each). Pre-shape gently and rest 20 minutes. Shape each piece into a round (boule) or oval (bâtard). Place seam-side up in floured bannetons.",
+    "FINAL FERMENTATION: Ferment at 24°C for 2–2½ hours, or retard overnight in the refrigerator (not recommended — loses delicate flavour).",
+    "BAKING: Preheat oven to 225°C with a Dutch oven or baking stone. Bake with steam for the first 15 minutes, then remove steam source and bake a further 25–30 minutes until deep russet brown. Total bake time: 40–45 minutes. Cool completely on a wire rack before cutting."
+  ],
+  "tips": "A stiff levain (60% hydration) gives this bread its French character: open crumb, russet crust, and delicate flavour. Bake the same day — retarding overnight dulls the subtle notes. 95% bread flour + 5% rye is the classic formula; the rye feeds the levain and adds colour.",
+  "timers": [
+    {
+      "label": "Levain Build",
+      "minutes": 720
+    },
+    {
+      "label": "Autolyse",
+      "minutes": 30
+    },
+    {
+      "label": "Bulk Fermentation",
+      "minutes": 150
+    },
+    {
+      "label": "Fold 1",
+      "minutes": 50
+    },
+    {
+      "label": "Fold 2",
+      "minutes": 50
+    },
+    {
+      "label": "Final Fermentation",
+      "minutes": 135
+    },
+    {
+      "label": "Baking",
+      "minutes": 43
+    }
+  ]
+}
