@@ -14,7 +14,7 @@
   </style>
 </head>
 <body>
-  <header><h1>Prepper Paputin: ГОТОВ</h1><p>Hemberedskap för folket</p></header>
+  <header><h1>Prepper Paputin</h1><p>ГОТОВНОСТЬ ДЛЯ НАРОДА · Hemberedskap för folket</p></header>
   <main><div class="actions"><button id="showButton" class="show" type="button">Visa på spegeln</button><button id="hideButton" class="hide" type="button">Dölj</button></div><div id="status" class="status"></div><div id="progress" class="progress"></div><div id="items"></div><button class="add" onclick="openForm()">+ Lägg till punkt</button></main>
   <dialog id="form"><form method="dialog" onsubmit="save(event)"><input id="id" type="hidden"><label for="title">Sak eller uppgift</label><input id="title" required><label for="notes">Anteckning</label><textarea id="notes"></textarea><div class="form-actions"><button class="save">Spara</button><button type="button" class="cancel" onclick="closeForm()">Avbryt</button></div></form></dialog>
   <script>
