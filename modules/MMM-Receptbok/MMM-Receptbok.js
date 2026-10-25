@@ -304,6 +304,8 @@ Module.register("MMM-Receptbok", {
       var self = this;
       var wasActive = this.isActive;
 
+      this.sendNotification("FULLSCREEN_OVERLAY_SHOW", this.name);
+
       this.currentRecipe = payload.recipe;
       this.pages = payload.pages;
       this.currentPage = 1;
@@ -368,6 +370,19 @@ Module.register("MMM-Receptbok", {
   },
 
   handleReturn: function () {
+    this.sendNotification("RETURN_TO_STANDARD_VIEW");
+    this.returnToStandardView();
+  },
+
+  notificationReceived: function (notification, payload) {
+    if (notification === "RETURN_TO_STANDARD_VIEW" ||
+        (notification === "FULLSCREEN_OVERLAY_SHOW" && payload !== this.name)) {
+      this.returnToStandardView();
+    }
+  },
+
+  returnToStandardView: function () {
+    if (!this.isActive) return;
     var self = this;
     this.isActive = false;
     this.activeTimers = [];

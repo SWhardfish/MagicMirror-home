@@ -31,7 +31,7 @@ Module.register("MMM-PrepperPaputin", {
 
     var header = document.createElement("div");
     header.className = "prepper-paputin-header";
-    header.innerHTML = "<div><div class=\"prepper-paputin-kicker\">ГОТОВНОСТЬ ДЛЯ НАРОДА</div><h1>Prepper Paputin</h1><p>Hemberedskap for minst en vecka</p></div><div class=\"prepper-paputin-progress\">" + complete + "/" + this.items.length + "</div>";
+    header.innerHTML = "<div><div class=\"prepper-paputin-kicker\">ГОТОВНОСТЬ ДЛЯ НАРОДА</div><h1>Prepper Paputin</h1><p>Hemberedskap för minst en vecka</p></div><div class=\"prepper-paputin-progress\">" + complete + "/" + this.items.length + "</div>";
     this.contentEl.appendChild(header);
 
     var list = document.createElement("div");
@@ -52,12 +52,26 @@ Module.register("MMM-PrepperPaputin", {
       this.items = payload;
       this.render();
     } else if (notification === "SHOW") {
+      this.sendNotification("FULLSCREEN_OVERLAY_SHOW", this.name);
       this.isVisible = true;
       this.updateDom(0);
     } else if (notification === "HIDE") {
-      this.isVisible = false;
-      this.updateDom(this.config.animationSpeed);
+      this.sendNotification("RETURN_TO_STANDARD_VIEW");
+      this.returnToStandardView();
     }
+  },
+
+  notificationReceived: function (notification, payload) {
+    if (notification === "RETURN_TO_STANDARD_VIEW" ||
+        (notification === "FULLSCREEN_OVERLAY_SHOW" && payload !== this.name)) {
+      this.returnToStandardView();
+    }
+  },
+
+  returnToStandardView: function () {
+    if (!this.isVisible) return;
+    this.isVisible = false;
+    this.updateDom(this.config.animationSpeed);
   },
 
   getStyles: function () {
