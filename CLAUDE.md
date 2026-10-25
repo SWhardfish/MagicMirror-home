@@ -43,6 +43,12 @@ interactive Y/N prompts so Claude cannot drive them non-interactively).
 
 MagicMirror server: `npm start` — port 8080, accessible on the local network.
 
+## Git commit identity
+
+- Repositories under `https://github.com/SWhardfish/` must be committed as `SWhardfish`.
+- Repositories under `https://mercedes-benz.ghe.com/mb-itf/` must use the corporate identity `Rylander, Anders (129-Extern-Anders) (rylanda)`.
+- Check the repository remote before committing and select the matching identity.
+
 ## Custom modules
 
 | Module | Purpose |

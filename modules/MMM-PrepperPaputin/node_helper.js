@@ -5,11 +5,15 @@ const path = require("path");
 module.exports = NodeHelper.create({
   start: function () {
     this.items = [];
+    this.isVisible = false;
     this.loadItems();
   },
 
   socketNotificationReceived: function (notification) {
-    if (notification === "INIT") this.broadcastItems();
+    if (notification === "INIT") {
+      this.broadcastItems();
+      this.sendSocketNotification(this.isVisible ? "SHOW" : "HIDE");
+    }
   },
 
   setExpressApp: function (app) {
@@ -20,10 +24,12 @@ module.exports = NodeHelper.create({
       res.json(self.items);
     });
     app.post("/prepper-paputin/show", function (req, res) {
+      self.isVisible = true;
       self.sendSocketNotification("SHOW");
       res.json({ success: true });
     });
     app.post("/prepper-paputin/hide", function (req, res) {
+      self.isVisible = false;
       self.sendSocketNotification("HIDE");
       res.json({ success: true });
     });
@@ -55,6 +61,7 @@ module.exports = NodeHelper.create({
       res.json({ success: true });
     });
     app.get("/prepper-paputin/remote", function (req, res) {
+      res.set("Cache-Control", "no-store, no-cache, must-revalidate");
       res.sendFile(path.join(__dirname, "remote_control.html"));
     });
   },
