@@ -54,6 +54,7 @@ MagicMirror server: `npm start` — port 8080, accessible on the local network.
 | Module | Purpose |
 |--------|---------|
 | `MMM-Receptbok` | Full-screen kitchen recipe display; GPIO + mobile web navigation |
+| `MMM-PrepperPaputin` | Full-screen preparedness checklist; editable mobile remote at `/prepper-paputin/remote` |
 | `MMM-RestaurangTavla` | School lunch menu scraper (Södra Latin) |
 | `MMM-SL` | Stockholm public transport departures |
 | `MMM-BusAlert` | Bus alert/notification overlay |
@@ -127,6 +128,16 @@ The graph reuses Chart.js already loaded by the weather module.
 - Full-screen overlay modules use a persistent DOM wrapper with CSS class
   toggling — not DOM replacement — to avoid MagicMirror's re-render cycle
   interfering with CSS transitions.
+- `MMM-Receptbok` and `MMM-PrepperPaputin` coordinate with
+  `FULLSCREEN_OVERLAY_SHOW` and `RETURN_TO_STANDARD_VIEW`. Showing either closes
+  the other; Recipe Return or Prepper Dölj must always restore the standard
+  weather/calendar dashboard.
+- The Prepper checklist is persisted in `modules/MMM-PrepperPaputin/items.json`.
+  The Pi copy is authoritative after edits through the mobile remote, so copy it
+  back before committing a backup.
+- Avoid inline mobile handlers named `command`; modern button elements expose a
+  `command` property that can shadow the function. Bind click listeners with
+  `addEventListener`, and serve editable remotes with `Cache-Control: no-store`.
 - `AGENTS.md` at the repo root says: do not create explainer documents or
   other documentation unless specifically asked to.
 - Chart.js (`chart.min.js` + date adapter) is loaded globally by
