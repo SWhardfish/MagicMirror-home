@@ -1,0 +1,98 @@
+[
+  {
+    "id": "radio",
+    "title": "Radio med batteri, vev eller solceller",
+    "notes": "Sveriges Radio P4 är beredskapskanalen.",
+    "checked": false
+  },
+  {
+    "id": "lampor",
+    "title": "Ficklampa och pannlampa",
+    "notes": "Ha extra batterier.",
+    "checked": false
+  },
+  {
+    "id": "vatten",
+    "title": "Rent vatten",
+    "notes": "Lagra 3-4 liter per person och dag i rena dunkar. Byt var sjätte månad och ha reningsplan.",
+    "checked": false
+  },
+  {
+    "id": "mat",
+    "title": "Mat för minst en vecka",
+    "notes": "Konserver, torrvaror, hårt bröd, nötter och torkad frukt som kräver lite vatten.",
+    "checked": false
+  },
+  {
+    "id": "kok",
+    "title": "Stormkök eller portabelt gaskök med bränsle",
+    "notes": "Använd utomhus eller med god ventilation.",
+    "checked": false
+  },
+  {
+    "id": "varme",
+    "title": "Sovsäckar, filtar och varma kläder",
+    "notes": "Komplettera med en alternativ värmekälla för vinter.",
+    "checked": false
+  },
+  {
+    "id": "ljus",
+    "title": "Tändstickor, stearinljus och värmeljus",
+    "notes": "",
+    "checked": false
+  },
+  {
+    "id": "fotogen",
+    "title": "Fotogenlampa och bränsle",
+    "notes": "Lampolja eller fotogen. God ventilation är viktigt.",
+    "checked": false
+  },
+  {
+    "id": "apotek",
+    "title": "Husapotek och viktiga mediciner",
+    "notes": "Första hjälpen-kit, sårvård och receptbelagda läkemedel.",
+    "checked": false
+  },
+  {
+    "id": "hygien",
+    "title": "Hygienartiklar",
+    "notes": "Våtservetter, handsprit, toalettpapper, blöjor, mensskydd och sopsäckar.",
+    "checked": false
+  },
+  {
+    "id": "strom",
+    "title": "Extra batterier och laddade powerbanks",
+    "notes": "",
+    "checked": false
+  },
+  {
+    "id": "kontanter",
+    "title": "Kontanter i sma valorer",
+    "notes": "Riksbanken rekommenderar cirka 1 000 kr per vuxen.",
+    "checked": false
+  },
+  {
+    "id": "kontakt",
+    "title": "Papperslista med viktiga telefonnummer",
+    "notes": "Familj, grannar, sjukhus, kommun, räddningstjänst och elleverantör.",
+    "checked": false
+  },
+  {
+    "id": "dokument",
+    "title": "Kopior av ID, pass och försäkringar",
+    "notes": "Förvara skyddat tillsammans med viktiga dokument.",
+    "checked": false
+  },
+  {
+    "id": "sysselsattning",
+    "title": "Spel, kortlek, böcker och pussel",
+    "notes": "",
+    "checked": false
+  },
+  {
+    "id": "plan",
+    "title": "Familjeplan och kontakt med grannar",
+    "notes": "Bestäm mötesplats och ansvar. Öva planen och uppdatera förrådet var sjätte månad.",
+    "checked": false
+  }
+]

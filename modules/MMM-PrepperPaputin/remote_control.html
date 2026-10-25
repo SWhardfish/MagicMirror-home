@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Prepper Paputin</title>
+  <style>
+    * { box-sizing: border-box; } body { margin: 0; background: #f5e9dc; color: #351116; font-family: Arial, sans-serif; }
+    header { padding: 20px; color: #fff2da; background: linear-gradient(135deg, #790d17, #bd202d); border-bottom: 5px solid #d7a84c; } h1 { margin: 0; font-family: Georgia, serif; font-size: 25px; } header p { margin: 5px 0 0; color: #f0c8c8; font-size: 13px; }
+    main { padding: 16px; padding-bottom: 96px; } .actions { display: flex; gap: 8px; margin-bottom: 16px; } button { border: 0; border-radius: 7px; padding: 11px 13px; font-size: 14px; font-weight: bold; cursor: pointer; } .show { flex: 1; background: #a81825; color: #fff4e0; } .hide { background: #e5d1bd; color: #64101a; }
+    .progress { margin-bottom: 14px; color: #7a1821; font-weight: bold; } .item { display: flex; gap: 10px; align-items: flex-start; padding: 13px; margin-bottom: 9px; background: #fffaf1; border-left: 5px solid #a81825; box-shadow: 0 1px 3px #0002; } .item.checked { opacity: .58; border-left-color: #7c9772; } .item.checked .title { text-decoration: line-through; }
+    .toggle { width: 27px; height: 27px; padding: 0; flex: none; border: 2px solid #a81825; border-radius: 0; background: #fffaf1; color: #a81825; } .checked .toggle { background: #7c9772; border-color: #7c9772; color: white; } .text { flex: 1; } .title { font-weight: bold; line-height: 1.25; } .notes { margin-top: 4px; color: #704f50; font-size: 12px; line-height: 1.35; } .edit, .delete { padding: 7px; font-size: 12px; } .edit { background: #e5d1bd; color: #64101a; } .delete { background: #f3d5d1; color: #941c24; }
+    .add { width: 100%; margin-top: 8px; background: #d7a84c; color: #451116; } dialog { border: 0; width: min(92vw, 500px); border-radius: 8px; box-shadow: 0 8px 30px #0006; } dialog::backdrop { background: #0008; } label { display: block; margin: 12px 0 5px; font-size: 12px; font-weight: bold; color: #79151d; } input, textarea { width: 100%; padding: 10px; border: 1px solid #cfae99; border-radius: 5px; font: inherit; } textarea { min-height: 85px; } .form-actions { display: flex; gap: 8px; margin-top: 16px; } .save { background: #a81825; color: white; flex: 1; } .cancel { background: #e5d1bd; color: #64101a; }
+  </style>
+</head>
+<body>
+  <header><h1>Prepper Paputin: ГОТОВ</h1><p>Hemberedskap för folket</p></header>
+  <main><div class="actions"><button class="show" onclick="command('show')">Visa på spegeln</button><button class="hide" onclick="command('hide')">Dölj</button></div><div id="progress" class="progress"></div><div id="items"></div><button class="add" onclick="openForm()">+ Lägg till punkt</button></main>
+  <dialog id="form"><form method="dialog" onsubmit="save(event)"><input id="id" type="hidden"><label for="title">Sak eller uppgift</label><input id="title" required><label for="notes">Anteckning</label><textarea id="notes"></textarea><div class="form-actions"><button class="save">Spara</button><button type="button" class="cancel" onclick="closeForm()">Avbryt</button></div></form></dialog>
+  <script>
+    var root = window.location.origin, items = [], form = document.getElementById('form');
+    function request(url, options) { return fetch(root + '/prepper-paputin/' + url, options).then(function (r) { if (!r.ok) throw new Error(); return r.json(); }); }
+    function load() { request('items').then(function (data) { items = data; render(); }); }
+    function render() { var checked = items.filter(function (item) { return item.checked; }).length, html = ''; document.getElementById('progress').textContent = checked + ' av ' + items.length + ' punkter klara'; items.forEach(function (item) { html += '<div class="item ' + (item.checked ? 'checked' : '') + '"><button class="toggle" onclick="toggle(\'' + item.id + '\')">' + (item.checked ? 'OK' : '') + '</button><div class="text"><div class="title">' + escapeHtml(item.title) + '</div><div class="notes">' + escapeHtml(item.notes || '') + '</div></div><button class="edit" onclick="openForm(\'' + item.id + '\')">Ändra</button><button class="delete" onclick="removeItem(\'' + item.id + '\')">Ta bort</button></div>'; }); document.getElementById('items').innerHTML = html; }
+    function command(action) { request(action, { method: 'POST' }); }
+    function toggle(id) { request('toggle/' + id, { method: 'POST' }).then(load); }
+    function removeItem(id) { if (confirm('Ta bort denna punkt?')) request('items/' + id, { method: 'DELETE' }).then(load); }
+    function openForm(id) { var item = items.find(function (candidate) { return candidate.id === id; }) || {}; document.getElementById('id').value = item.id || ''; document.getElementById('title').value = item.title || ''; document.getElementById('notes').value = item.notes || ''; form.showModal(); }
+    function closeForm() { document.getElementById('form').close(); }
+    function save(event) { event.preventDefault(); var id = document.getElementById('id').value, previous = items.find(function (item) { return item.id === id; }); request('save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: id || undefined, title: document.getElementById('title').value, notes: document.getElementById('notes').value, checked: previous && previous.checked }) }).then(function () { form.close(); load(); }); }
+    function escapeHtml(value) { var div = document.createElement('div'); div.textContent = value; return div.innerHTML; }
+    load();
+  </script>
+</body>
+</html>

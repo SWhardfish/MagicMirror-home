@@ -1,0 +1,15 @@
+.prepper-paputin-wrapper { position: fixed; inset: 0; z-index: 9999; overflow: hidden; opacity: 0; pointer-events: none; background: #160808; transition: opacity 0.5s ease; }
+.prepper-paputin-wrapper.prepper-paputin-visible { opacity: 1; pointer-events: auto; }
+.prepper-paputin-content { height: 100%; color: #f5e8d5; font-family: "Roboto Condensed", sans-serif; }
+.prepper-paputin-header { min-height: 160px; display: flex; justify-content: space-between; align-items: center; padding: 30px 42px; background: linear-gradient(135deg, #750d16, #b51d2a); border-bottom: 5px solid #d9aa52; }
+.prepper-paputin-kicker { color: #f0c766; font-size: 15px; font-weight: bold; letter-spacing: 3px; }
+.prepper-paputin-header h1 { margin: 3px 0; font-family: Georgia, serif; font-size: 46px; color: #fff1d7; }
+.prepper-paputin-header p { margin: 0; color: #f1caca; font-size: 18px; }
+.prepper-paputin-progress { min-width: 100px; padding: 18px; border: 2px solid #f0c766; color: #f0c766; font-size: 28px; font-weight: bold; text-align: center; }
+.prepper-paputin-list { height: calc(100% - 160px); padding: 28px 42px; overflow: hidden; column-count: 2; column-gap: 38px; }
+.prepper-paputin-item { break-inside: avoid; display: flex; gap: 15px; padding: 13px 0; border-bottom: 1px solid #4a1b20; }
+.prepper-paputin-mark { flex: 0 0 27px; height: 27px; border: 2px solid #d9aa52; color: #d9aa52; text-align: center; line-height: 23px; font-size: 11px; font-weight: bold; }
+.prepper-paputin-item-title { font-size: 18px; color: #fff1d7; line-height: 1.25; }
+.prepper-paputin-item-notes { margin-top: 3px; color: #cbaeb0; font-size: 13px; line-height: 1.25; }
+.prepper-paputin-item-checked .prepper-paputin-mark { background: #d9aa52; color: #5b1018; }
+.prepper-paputin-item-checked .prepper-paputin-item-title { color: #a9898d; text-decoration: line-through; }
