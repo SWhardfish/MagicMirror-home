@@ -700,6 +700,8 @@ Module.register("MMM-OpenWeatherForecast", {
     const cutoffTime = Date.now() / 1000 - (72 * 60 * 60);
     const timestamps = [];
     const temperatures = [];
+    const rainValues = [];
+    const snowValues = [];
 
     if (weatherData && Array.isArray(weatherData)) {
       weatherData.forEach(entry => {
@@ -708,6 +710,8 @@ Module.register("MMM-OpenWeatherForecast", {
             if (record.dt >= cutoffTime) {
               timestamps.push(record.dt * 1000); // Convert to milliseconds
               temperatures.push(record.temp);
+              rainValues.push(record.rain || 0);
+              snowValues.push(record.snow || 0);
             }
           });
         }
@@ -729,6 +733,31 @@ Module.register("MMM-OpenWeatherForecast", {
       x: ts,
       y: temperatures[i]
     }));
+    const rainData = timestamps.map((ts, i) => ({ x: ts, y: rainValues[i] }));
+    const snowData = timestamps.map((ts, i) => ({ x: ts, y: snowValues[i] }));
+
+    // Max/min temp for today only
+    const todayStartMs = new Date().setHours(0, 0, 0, 0);
+    let todayMax = null, todayMin = null;
+    for (let i = 0; i < timestamps.length; i++) {
+      if (timestamps[i] >= todayStartMs) {
+        if (todayMax === null || temperatures[i] > todayMax) todayMax = temperatures[i];
+        if (todayMin === null || temperatures[i] < todayMin) todayMin = temperatures[i];
+      }
+    }
+    const minMaxEl = document.getElementById("owf-temp-minmax");
+    if (minMaxEl && todayMax !== null) {
+      minMaxEl.textContent = "Max: " + Math.round(todayMax) + "  Min: " + Math.round(todayMin);
+    }
+
+    // Rain y2 scale — round up to nearest 2mm, minimum 4mm; hidden when dry
+    // Rain and snow share the same axis (both mm water equivalent)
+    const maxRain = rainValues.length > 0 ? Math.max(...rainValues) : 0;
+    const maxSnow = snowValues.length > 0 ? Math.max(...snowValues) : 0;
+    const hasRain = maxRain > 0;
+    const hasSnow = maxSnow > 0;
+    const hasPrecip = hasRain || hasSnow;
+    const rainYMax = Math.max(Math.ceil(Math.max(maxRain, maxSnow) / 2) * 2, 4);
 
     // CRITICAL: Properly destroy existing chart to prevent memory leaks
     if (this.temperatureChart) {
@@ -749,15 +778,45 @@ Module.register("MMM-OpenWeatherForecast", {
     this.temperatureChart = new Chart(ctx, {
       type: 'line',
       data: {
-        datasets: [{
-          data: chartData,
-          borderColor: '#FA8072', // salmon color
-          borderWidth: 0.8, // Thinner line
-          backgroundColor: 'transparent',
-          pointRadius: 0,
-          pointHoverRadius: 0,
-          tension: 0.4 // smooth curve
-        }]
+        datasets: [
+          ...(hasRain ? [{
+            // Rain — drawn behind temperature
+            data: rainData,
+            borderColor: 'rgba(100, 200, 255, 0.7)',
+            borderWidth: 0.8,
+            backgroundColor: 'rgba(100, 200, 255, 0.15)',
+            fill: true,
+            pointRadius: 0,
+            pointHoverRadius: 0,
+            tension: 0.4,
+            yAxisID: 'y2',
+            order: 2
+          }] : []),
+          ...(hasSnow ? [{
+            // Snow — warm off-white, same axis as rain
+            data: snowData,
+            borderColor: 'rgba(232, 228, 224, 0.85)',
+            borderWidth: 0.8,
+            backgroundColor: 'rgba(232, 228, 224, 0.15)',
+            fill: true,
+            pointRadius: 0,
+            pointHoverRadius: 0,
+            tension: 0.4,
+            yAxisID: 'y2',
+            order: 2
+          }] : []),
+          {
+            data: chartData,
+            borderColor: '#FA8072', // salmon color
+            borderWidth: 0.8, // Thinner line
+            backgroundColor: 'transparent',
+            pointRadius: 0,
+            pointHoverRadius: 0,
+            tension: 0.4, // smooth curve
+            yAxisID: 'y',
+            order: 1
+          }
+        ]
       },
       options: {
         responsive: true,
@@ -788,7 +847,7 @@ Module.register("MMM-OpenWeatherForecast", {
             ticks: {
               color: 'white',
               font: {
-                size: 11
+                size: 8
               },
               callback: function(value, index, values) {
                 const date = new Date(value);
@@ -838,6 +897,7 @@ Module.register("MMM-OpenWeatherForecast", {
             },
             grid: {
               color: function(context) {
+                if (!context.tick) return 'transparent';
                 const date = new Date(context.tick.value);
                 const hour = date.getHours();
                 const minute = date.getMinutes();
@@ -859,12 +919,12 @@ Module.register("MMM-OpenWeatherForecast", {
             ticks: {
               color: 'white',
               font: {
-                size: 11
+                size: 8
               },
               callback: function(value) {
                 return value.toFixed(1) + ' °C';
               },
-              maxTicksLimit: 4 // Reduce y-axis ticks to about half
+              maxTicksLimit: 4
             },
             grid: {
               color: 'rgba(128, 128, 128, 0.4)',
@@ -874,6 +934,27 @@ Module.register("MMM-OpenWeatherForecast", {
             border: {
               display: false
             }
+          },
+          y2: {
+            min: 0,
+            max: rainYMax,
+            display: hasPrecip,
+            position: 'right',
+            title: {
+              display: true,
+              text: 'mm',
+              color: 'rgba(100, 200, 255, 0.5)',
+              font: { size: 8 },
+              padding: 0
+            },
+            ticks: {
+              color: 'rgba(100, 200, 255, 0.6)',
+              font: { size: 8 },
+              count: 3,
+              callback: function(value) { return value.toFixed(0); }
+            },
+            grid: { display: false },
+            border: { display: false }
           }
         },
         layout: {
@@ -922,7 +1003,7 @@ Module.register("MMM-OpenWeatherForecast", {
 
             ctx.save();
             ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
-            ctx.font = '14px sans-serif';
+            ctx.font = '10px sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(dayName, xPos, yMid);
