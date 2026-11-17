@@ -1,3 +1,4 @@
+var audio = require("../MMM-Monitoring/audio.js");
 const NodeHelper = require("node_helper");
 const fs = require("fs");
 const path = require("path");
@@ -19,6 +20,8 @@ module.exports = NodeHelper.create({
       this.loadRecipes();
     } else if (notification === "REQUEST_RECIPE") {
       this.sendRecipe(payload.id);
+    } else if (notification === "TIMER_ALARM_STOP") {
+      audio.stop();
     }
   },
 
@@ -322,6 +325,7 @@ module.exports = NodeHelper.create({
       return t.label !== label;
     });
     this.broadcastTimers();
+    audio.stop();
     if (this.activeTimers.length === 0) {
       this.stopTimerTick();
     }
@@ -375,6 +379,7 @@ module.exports = NodeHelper.create({
   // Stub ready for WS2812 LEDs via rpi-ws281x — wire up hardware then uncomment.
   triggerLedAlert: function (label) {
     console.log("MMM-Receptbok: Timer done — " + label);
+    audio.play("alarm");
 
     // --- WS2812 LED STUB ---
     // Install: npm install rpi-ws281x

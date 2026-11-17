@@ -7,6 +7,8 @@ config/configNOPASS.js
 # Runtime data files
 modules/MMM-SolarProduction/solar_data.json
 modules/MMM-OpenWeatherForecast/weather_data.json
+modules/MMM-Monitoring/monitoring-history.jsonl
+modules/MMM-Monitoring/audio-settings.json
 
 # Node dependencies
 node_modules/

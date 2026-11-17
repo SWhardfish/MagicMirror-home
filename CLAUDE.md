@@ -61,6 +61,7 @@ MagicMirror server: `npm start` — port 8080, accessible on the local network.
 | `MMM-LCDScheduler` | GPIO-driven LCD screen scheduler |
 | `MMM-OpenWeatherForecast` | Weather forecast with Chart.js temperature graph (72h) |
 | `MMM-SolarProduction` | Building solar panel production graph + stats (72h, green line) |
+| `MMM-Monitoring` | Invisible host telemetry module with statistics and LAN admin pages |
 | `MMM-Images` | Rotating image display |
 
 ## Design language — mirror display
@@ -121,8 +122,56 @@ Data is parsed with regex (no cheerio dependency). The module stores its
 own rolling 72h readings in `modules/MMM-SolarProduction/solar_data.json`.
 The graph reuses Chart.js already loaded by the weather module.
 
+The source HTML changed in October 2026 from `production-value` table cells to
+labeled `value` rows. The parser supports both formats. It also parses the
+embedded `labels` and `dataValues` arrays to backfill today's intraday curve.
+The endpoint publishes only today's power curve, so missing curves from prior
+days cannot be reconstructed after an outage. Parse and fetch failures send
+cached data instead of leaving the frontend at "Waiting for solar data...".
+
+The summary beneath the chart is intentionally one compact row containing
+Today, Yesterday, and the latest three monthly totals. Monthly entries must be
+sorted from their Swedish or English month/year labels rather than relying on
+the insertion order in `monthly_data.json`.
+
+## Monitoring and administration
+
+`MMM-Monitoring` is an invisible module configured in `config/config.js`. It
+samples the Pi once per minute and retains seven days in
+`modules/MMM-Monitoring/monitoring-history.jsonl` (ignored by Git).
+
+LAN pages:
+
+- Statistics: `http://192.168.1.208:8080/MMM-Monitoring/statistics.html`
+- Admin: `http://192.168.1.208:8080/MMM-Monitoring/admin.html`
+
+The statistics API reports CPU temperature/utilisation, RAM, load, disk,
+uptime, and MagicMirror process-tree RSS/swap. The admin API supports an LCD
+power-button pulse, MagicMirror restart, Pi reboot, and Pi shutdown. Admin
+commands are restricted to private-network clients; reboot, shutdown, and LCD
+toggle also require browser confirmation.
+
+This mirror currently has no fan (show as not installed, no controls until
+fitted). A small mono speaker is connected to the LCD controller board and is
+fed by the Pi's **HDMI audio, right channel only** (verified by ear: left test
+silent, right test audible). Play via ALSA device `hdmi:CARD=vc4hdmi,DEV=0`
+(`plughw:1,0` fails: HDMI only accepts IEC958). `MMM-Monitoring/audio.js` is the
+shared helper: it renders sounds mono-to-right, applies software volume
+(0-100, quadratic, default 25 ~ 4% full scale, stored in git-ignored
+`audio-settings.json`) and spawns `aplay`. The admin page has a volume slider
+and test-tone button (`set-volume` / `speaker-test` actions). `MMM-Receptbok`
+plays the `alarm` pattern when a timer finishes and stops it when the done
+overlay is dismissed or a timer is cancelled/started. Keep volume low when
+testing - the family sleeps nearby. The implementation is based on the monitoring pages in the
+local `MMEntrance` repository, but arcade, PIR, GTFS, fan, and audio telemetry
+were deliberately not copied because they do not exist on this mirror.
+
 ## Gotchas
 
+- Receptbok uses emoji (⏱ ⏰ 🍽 💡). Raspberry Pi OS has no emoji font by default;
+  `fonts-noto-color-emoji` was installed on the Pi (Nov 2026). If emoji show as
+  squares after a reinstall, reinstall it and restart MagicMirror (Electron
+  only loads fonts at startup).
 - `onoff` (GPIO npm package) throws on non-Pi systems. All modules that use
   it wrap `require("onoff")` in a try/catch so development on Windows works.
 - Full-screen overlay modules use a persistent DOM wrapper with CSS class

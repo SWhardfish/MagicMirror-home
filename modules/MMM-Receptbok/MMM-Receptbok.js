@@ -238,10 +238,11 @@ Module.register("MMM-Receptbok", {
     if (this.overlayDismissTimer) clearTimeout(this.overlayDismissTimer);
     this.overlayDismissTimer = setTimeout(function () {
       self.dismissTimerOverlay();
-    }, 10000);
+    }, 26000);
   },
 
   dismissTimerOverlay: function () {
+    if (this.timerDoneLabel) this.sendSocketNotification("TIMER_ALARM_STOP");
     this.timerDoneLabel = null;
     if (this.overlayDismissTimer) {
       clearTimeout(this.overlayDismissTimer);

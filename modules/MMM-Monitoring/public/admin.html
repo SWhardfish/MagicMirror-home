@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Home Mirror Admin</title>
+  <style>
+    :root { color-scheme: dark; --bg: #090d12; --panel: #111923; --line: #263548; --text: #e8eef6; --muted: #8796a8; --blue: #66a7ff; --red: #ff716c; --green: #67d99a; --amber: #f0b65a; }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at top, #172332, var(--bg) 55%); color: var(--text); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    main { width: min(100%, 480px); padding: 28px; background: var(--panel); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 24px 70px #0008; }
+    h1 { margin: 0 0 6px; font-size: 22px; letter-spacing: .12em; }
+    .status { margin-bottom: 24px; color: var(--muted); font-size: 13px; }
+    .readout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .meter, .hardware { padding: 14px; border: 1px solid var(--line); border-radius: 10px; }
+    .label { display: block; margin-bottom: 5px; color: var(--muted); font-size: 10px; letter-spacing: .14em; }
+    .value { font-size: 16px; text-transform: uppercase; }
+    .section-label { margin: 24px 0 10px; color: var(--muted); font-size: 11px; letter-spacing: .14em; }
+    .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    button { min-height: 58px; border: 1px solid var(--line); border-radius: 10px; background: #172231; color: var(--text); font: inherit; font-weight: 700; letter-spacing: .06em; cursor: pointer; }
+    button:active { transform: translateY(1px); }
+    button:disabled { opacity: .42; cursor: not-allowed; }
+    button[data-action="lcd-toggle"], button[data-action="restart-mirror"] { border-color: var(--blue); color: var(--blue); }
+    button[data-action="reboot"] { border-color: var(--amber); color: var(--amber); }
+    button[data-action="poweroff"] { border-color: var(--red); color: var(--red); }
+    .hardware-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .hardware strong { color: var(--amber); }
+    .note { margin: 12px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .volume { display: flex; align-items: center; gap: 14px; }
+    .volume input { flex: 1; accent-color: var(--blue); }
+    .volume strong { min-width: 48px; text-align: right; }
+    button[data-action="speaker-test"] { border-color: var(--blue); color: var(--blue); }
+    a { color: var(--green); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>HOME MIRROR ADMIN</h1>
+    <div class="status" id="status">Connecting...</div>
+    <div class="readout">
+      <div class="meter"><span class="label">CPU TEMP</span><span class="value" id="temperature">--.- C</span></div>
+      <div class="meter"><span class="label">CPU</span><span class="value" id="cpu">--%</span></div>
+      <div class="meter"><span class="label">RAM</span><span class="value" id="ram">--%</span></div>
+      <div class="meter"><span class="label">UPTIME</span><span class="value" id="uptime">--</span></div>
+    </div>
+    <div class="section-label">DISPLAY</div>
+    <div class="controls"><button data-action="lcd-toggle">TOGGLE LCD POWER</button><button id="statistics">OPEN STATISTICS</button></div>
+    <p class="note">The LCD uses a single hardware power-button pulse, so its current on/off state cannot be read reliably.</p>
+    <div class="section-label">HARDWARE</div>
+    <div class="hardware-grid">
+      <div class="hardware"><span class="label">FAN</span><strong>NOT INSTALLED</strong></div>
+      <div class="hardware"><span class="label">SPEAKER</span><strong>RIGHT CHANNEL</strong></div>
+    </div>
+    <div class="section-label">SPEAKER VOLUME</div>
+    <div class="volume"><input type="range" id="volume" min="0" max="100" step="1" value="25"><strong id="volumeValue">25%</strong></div>
+    <div class="controls"><button data-action="speaker-test">PLAY TEST TONE</button></div>
+    <p class="note">Fan not installed. Volume applies to timer alarms and the test tone. 0 mutes.</p>
+    <div class="section-label">SYSTEM</div>
+    <div class="controls">
+      <button data-action="restart-mirror">RESTART MIRROR</button>
+      <button data-action="reboot">REBOOT PI</button>
+      <button data-action="poweroff">SHUT DOWN PI</button>
+    </div>
+    <p class="note">Reboot and shutdown require confirmation. After shutdown, power must be restored manually.</p>
+  </main>
+  <script>
+    (function () {
+      var status = document.getElementById("status");
+      var buttons = Array.prototype.slice.call(document.querySelectorAll("button[data-action]"));
+      var volume = document.getElementById("volume");
+      var volumeValue = document.getElementById("volumeValue");
+      var volumeTimer = null;
+      volume.addEventListener("input", function () {
+        volume.dataset.touched = "1";
+        volumeValue.textContent = volume.value + "%";
+        clearTimeout(volumeTimer);
+        volumeTimer = setTimeout(function () {
+          fetch("/MMM-Monitoring/api/admin", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "set-volume", volume: Number(volume.value) }) })
+            .then(function (r) { return r.json(); }).then(function (d) { status.textContent = d.message; })
+            .catch(function (e) { status.textContent = e.message; });
+        }, 300);
+      });
+      function duration(seconds) { var days = Math.floor(seconds / 86400), hours = Math.floor(seconds % 86400 / 3600); return days ? days + "d " + hours + "h" : hours + "h"; }
+      function busy(value) { buttons.forEach(function (button) { button.disabled = value; }); }
+      function load() {
+        fetch("/MMM-Monitoring/api/admin", { cache: "no-store" }).then(function (response) {
+          if (!response.ok) throw new Error("HTTP " + response.status); return response.json();
+        }).then(function (data) {
+          var latest = data.latest || {};
+          document.getElementById("temperature").textContent = Number.isFinite(latest.c) ? latest.c.toFixed(1) + " C" : "--.- C";
+          document.getElementById("cpu").textContent = Number.isFinite(latest.cpu) ? latest.cpu.toFixed(1) + "%" : "warming up";
+          document.getElementById("ram").textContent = Number.isFinite(latest.ram) ? latest.ram.toFixed(1) + "%" : "--%";
+          document.getElementById("uptime").textContent = Number.isFinite(latest.uptime) ? duration(latest.uptime) : "--";
+          status.textContent = "Connected / updated " + new Date(latest.t || Date.now()).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+          if (data.audio && !volume.dataset.touched) { volume.value = data.audio.volume; volumeValue.textContent = data.audio.volume + "%"; }
+          busy(false);
+        }).catch(function (error) { status.textContent = "Admin API unavailable: " + error.message; busy(true); });
+      }
+      function send(action) {
+        if (action === "reboot" && !window.confirm("Reboot the Raspberry Pi now?")) return;
+        if (action === "poweroff" && !window.confirm("Shut down the Raspberry Pi now? It must be powered on manually.")) return;
+        if (action === "lcd-toggle" && !window.confirm("Send an LCD power-button pulse?")) return;
+        busy(true); status.textContent = "Applying " + action.replace("-", " ") + "...";
+        fetch("/MMM-Monitoring/api/admin", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: action }) })
+          .then(function (response) { return response.json().then(function (data) { if (!response.ok) throw new Error(data.message || "Command failed"); return data; }); })
+          .then(function (data) { status.textContent = data.message; if (action !== "restart-mirror" && action !== "reboot" && action !== "poweroff") { busy(false); setTimeout(load, 1500); } })
+          .catch(function (error) { status.textContent = error.message; busy(false); });
+      }
+      buttons.forEach(function (button) { button.addEventListener("click", function () { send(button.dataset.action); }); });
+      document.getElementById("statistics").addEventListener("click", function () { window.location.href = "/MMM-Monitoring/statistics.html"; });
+      load(); setInterval(load, 30000);
+    })();
+  </script>
+</body>
+</html>

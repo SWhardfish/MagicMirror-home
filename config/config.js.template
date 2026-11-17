@@ -290,6 +290,9 @@ let config = {
                 }
       },
       {
+        module: "MMM-Monitoring"
+      },
+      {
         module: "MMM-LCDScheduler",
         config: {
           gpioPin: 17,
