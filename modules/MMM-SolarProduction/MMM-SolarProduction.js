@@ -79,7 +79,7 @@ Module.register("MMM-SolarProduction", {
         " &nbsp; Yesterday: <span class=\"value\">" + Math.round(stats.yesterdayKwh) + " kWh</span>";
       statsRow.appendChild(leftSpan);
 
-      // Right side: monthly history newest→oldest with 3-letter month abbreviations
+      // Monthly history newest to oldest with 3-letter month abbreviations
       var monthlyReadings = this.solarData.monthlyReadings || [];
       if (monthlyReadings.length > 0) {
         var svToEn = {
@@ -87,7 +87,21 @@ Module.register("MMM-SolarProduction", {
           "Maj": "May", "Juni": "Jun", "Juli": "Jul", "Augusti": "Aug",
           "September": "Sep", "Oktober": "Oct", "November": "Nov", "December": "Dec"
         };
-        var reversed = monthlyReadings.slice().reverse().slice(0, 3);
+        var monthNumbers = {
+          "Januari": 0, "January": 0, "Februari": 1, "February": 1,
+          "Mars": 2, "March": 2, "April": 3, "Maj": 4, "May": 4,
+          "Juni": 5, "June": 5, "Juli": 6, "July": 6,
+          "Augusti": 7, "August": 7, "September": 8,
+          "Oktober": 9, "October": 9, "November": 10,
+          "December": 11
+        };
+        var reversed = monthlyReadings.slice().sort(function (a, b) {
+          var aParts = (a.label || "").split(" ");
+          var bParts = (b.label || "").split(" ");
+          var aDate = parseInt(aParts[1]) * 12 + (monthNumbers[aParts[0]] || 0);
+          var bDate = parseInt(bParts[1]) * 12 + (monthNumbers[bParts[0]] || 0);
+          return bDate - aDate;
+        }).slice(0, 3);
         var parts = [];
         for (var m = 0; m < reversed.length; m++) {
           var label = reversed[m].label || "";

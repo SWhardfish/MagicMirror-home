@@ -50,7 +50,7 @@ module.exports = NodeHelper.create({
       .then(function (response) {
         var parsed = self.parseHTML(response.data);
         if (parsed) {
-          self.saveReading(parsed.currentPower);
+          self.saveReadings(parsed);
           self.saveDailyReading(parsed);
           self.saveMonthlyReading(parsed);
           var readings = self.getReadings();
@@ -63,22 +63,23 @@ module.exports = NodeHelper.create({
             stats: parsed
           });
           console.log("[MMM-SolarProduction] Data updated: " + parsed.currentPower + " kW");
+        } else {
+          self.sendCachedData();
         }
       })
       .catch(function (error) {
         console.error("[MMM-SolarProduction] Fetch error: " + error.message);
-        var readings = self.getReadings();
-        var dailyReadings = self.getDailyReadings();
-        var monthlyReadings = self.getMonthlyReadings();
-        if (readings.length > 0) {
-          self.sendSocketNotification("SOLAR_DATA", {
-            readings: readings,
-            dailyReadings: dailyReadings,
-            monthlyReadings: monthlyReadings,
-            stats: null
-          });
-        }
+        self.sendCachedData();
       });
+  },
+
+  sendCachedData: function () {
+    this.sendSocketNotification("SOLAR_DATA", {
+      readings: this.getReadings(),
+      dailyReadings: this.getDailyReadings(),
+      monthlyReadings: this.getMonthlyReadings(),
+      stats: null
+    });
   },
 
   parseHTML: function (html) {
@@ -90,8 +91,28 @@ module.exports = NodeHelper.create({
         values.push(parseFloat(match[1]));
       }
 
+      var readLabeledValue = function (label) {
+        var pattern = new RegExp(label + "[\\s\\S]{0,500}?<span class=['\"][^'\"]*\\bvalue\\b[^'\"]*['\"][^>]*>\\s*([\\d.,]+)\\s*(?:kW|kWh|%)?[^<]*<\\/span>", "i");
+        var labeledMatch = html.match(pattern);
+        return labeledMatch ? parseFloat(labeledMatch[1].replace(",", ".")) : null;
+      };
+
+      // The source changed from production-value table cells to labeled data rows.
+      if (values.length < 2) {
+        values = [
+          readLabeledValue("Nuvarande effekt"),
+          readLabeledValue("Effektprocent"),
+          readLabeledValue("Hittills idag")
+        ];
+      }
+
       if (values.length < 2) {
         console.error("[MMM-SolarProduction] Could not parse enough values from HTML");
+        return null;
+      }
+
+      if (values[0] === null || values[1] === null) {
+        console.error("[MMM-SolarProduction] Could not parse current values from HTML");
         return null;
       }
 
@@ -99,6 +120,9 @@ module.exports = NodeHelper.create({
       var status = statusMatch ? statusMatch[1] : "unknown";
 
       var contactMatch = html.match(/Senast kontakt<\/td>\s*<td>([\d\- :]+)<\/td>/);
+      if (!contactMatch) {
+        contactMatch = html.match(/Senast kontakt[\s\S]{0,500}?<span class=['"][^'"]*\bvalue\b[^'"]*['"][^>]*>([\d\- :]+)<\/span>/i);
+      }
       var lastContact = contactMatch ? contactMatch[1] : null;
 
       var monthlySplit = html.indexOf("Månadssummering");
@@ -111,6 +135,12 @@ module.exports = NodeHelper.create({
       while ((dailyMatch = dailyRegex.exec(dailySection)) !== null) {
         days.push({ label: dailyMatch[1], value: parseFloat(dailyMatch[2]) });
       }
+      if (days.length === 0) {
+        dailyRegex = /<div class=['"]history-row['"]><span class=['"]label['"]>([^<]+)<\/span><span class=['"]value['"]>([\d.,]+)\s*kWh<\/span><\/div>/g;
+        while ((dailyMatch = dailyRegex.exec(dailySection)) !== null) {
+          days.push({ label: dailyMatch[1], value: parseFloat(dailyMatch[2].replace(",", ".")) });
+        }
+      }
 
       var monthlyKwh = [];
       var monthlyLabels = [];
@@ -120,6 +150,13 @@ module.exports = NodeHelper.create({
         while ((mMatch = monthRegex.exec(monthlySection)) !== null) {
           monthlyLabels.push(mMatch[1].trim());
           monthlyKwh.push(parseFloat(mMatch[2]));
+        }
+        if (monthlyLabels.length === 0) {
+          monthRegex = /<div class=['"]history-row['"]><span class=['"]label['"]>([^<]+)<\/span><span class=['"]value['"]>([\d.,]+)\s*kWh<\/span><\/div>/g;
+          while ((mMatch = monthRegex.exec(monthlySection)) !== null) {
+            monthlyLabels.push(mMatch[1].trim());
+            monthlyKwh.push(parseFloat(mMatch[2].replace(",", ".")));
+          }
         }
       }
 
@@ -135,6 +172,26 @@ module.exports = NodeHelper.create({
         monthlyLabels: monthlyLabels
       };
 
+      var chartLabelsMatch = html.match(/const labels\s*=\s*(\[[^;]+\])/);
+      var chartValuesMatch = html.match(/const dataValues\s*=\s*(\[[^;]+\])/);
+      result.intradayReadings = [];
+      if (chartLabelsMatch && chartValuesMatch) {
+        var chartLabels = JSON.parse(chartLabelsMatch[1]);
+        var chartValues = JSON.parse(chartValuesMatch[1]);
+        var today = new Date();
+        for (var i = 0; i < Math.min(chartLabels.length, chartValues.length); i++) {
+          var timeParts = chartLabels[i].split(":");
+          var readingTime = new Date(
+            today.getFullYear(), today.getMonth(), today.getDate(),
+            parseInt(timeParts[0]), parseInt(timeParts[1]), 0, 0
+          );
+          result.intradayReadings.push({
+            dt: Math.floor(readingTime.getTime() / 1000),
+            power_kw: parseFloat(chartValues[i])
+          });
+        }
+      }
+
       return result;
     } catch (e) {
       console.error("[MMM-SolarProduction] Parse error: " + e.message);
@@ -142,10 +199,11 @@ module.exports = NodeHelper.create({
     }
   },
 
-  saveReading: function (powerKw) {
+  saveReadings: function (parsed) {
     try {
       var readings = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
       var now = Math.floor(Date.now() / 1000);
+      var powerKw = parsed.currentPower;
 
       // Reject obviously wrong values — parse errors produce kWh totals (100-1000+) in the kW slot
       if (powerKw > 100) {
@@ -153,11 +211,24 @@ module.exports = NodeHelper.create({
         return;
       }
 
+      if (parsed.intradayReadings && parsed.intradayReadings.length > 0) {
+        var byTimestamp = {};
+        for (var i = 0; i < readings.length; i++) {
+          byTimestamp[readings[i].dt] = readings[i];
+        }
+        for (var j = 0; j < parsed.intradayReadings.length; j++) {
+          byTimestamp[parsed.intradayReadings[j].dt] = parsed.intradayReadings[j];
+        }
+        readings = Object.keys(byTimestamp).map(function (dt) {
+          return byTimestamp[dt];
+        });
+      }
       readings.push({ dt: now, power_kw: powerKw });
 
       var graphHours = this.config.graphHours || 72;
       var cutoff = now - (graphHours * 60 * 60);
       readings = readings.filter(function (r) { return r.dt >= cutoff; });
+      readings.sort(function (a, b) { return a.dt - b.dt; });
 
       fs.writeFileSync(DATA_FILE, JSON.stringify(readings));
     } catch (e) {
